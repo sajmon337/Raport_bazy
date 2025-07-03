@@ -1,0 +1,12 @@
+[submodule "sprawozdanie/rozdzial2/Wydajnosc_Skalowanie_i_Replikacja"]
+	path = sprawozdanie/rozdzial2/Wydajnosc_Skalowanie_i_Replikacja
+	url = https://github.com/Broksonn/Wydajnosc_Skalowanie_i_Replikacja.git
+[submodule "sprawozdanie/rozdzial2/Bezpieczenstwo"]
+	path = sprawozdanie/rozdzial2/Bezpieczenstwo
+	url = https://github.com/BlazejUl/bezpieczenstwo.git
+[submodule "source/rozdzial2/Wydajnosc_Skalowanie_i_Replikacja"]
+	path = source/rozdzial2/Wydajnosc_Skalowanie_i_Replikacja
+	url = https://github.com/Broksonn/Wydajnosc_Skalowanie_i_Replikacja.git
+[submodule "source/rozdzial2/Wydajnosc_Skalowanie_i-Replikacja"]
+	path = source/rozdzial2/Wydajnosc_Skalowanie_i-Replikacja
+	url = https://github.com/Broksonn/Wydajnosc_Skalowanie_i_Replikacja.git

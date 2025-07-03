@@ -1,0 +1,47 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{\numberline {1}Wprowadzenie}{3}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Przegląd literatury}{4}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Wydajność, skalowanie i replikacja}{4}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Wstęp}{4}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Buforowanie oraz zarządzanie połączeniami}{4}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Buforowanie połączeń:}{4}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Zarządzanie połączeniami:}{5}{subsection.2.3.2}%
+\contentsline {section}{\numberline {2.4}Wydajność}{5}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Klastry oraz indeksy}{5}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}1. Współbieżność w bazach danych}{5}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}2. Przepustowość bazy danych}{6}{subsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4.4}3. Responsywność bazy danych}{6}{subsection.2.4.4}%
+\contentsline {subsection}{\numberline {2.4.5}4. Zapytania N+1}{6}{subsection.2.4.5}%
+\contentsline {subsection}{\numberline {2.4.6}5. Błędy w bazach danych}{7}{subsection.2.4.6}%
+\contentsline {subsection}{\numberline {2.4.7}6. Zużycie dostępnych zasobów}{7}{subsection.2.4.7}%
+\contentsline {subsection}{\numberline {2.4.8}Prostota rozbudowy:}{7}{subsection.2.4.8}%
+\contentsline {subsection}{\numberline {2.4.9}Analityka czasu rzeczywistego:}{8}{subsection.2.4.9}%
+\contentsline {subsection}{\numberline {2.4.10}Dostępność w chmurze:}{8}{subsection.2.4.10}%
+\contentsline {subsection}{\numberline {2.4.11}Unikanie wąskich gardeł:}{8}{subsection.2.4.11}%
+\contentsline {section}{\numberline {2.5}Skalowanie}{8}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Replikacja}{8}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Mechanizmy replikacji}{9}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Rodzaje mechanizmów replikacji}{9}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Zalety i Wady replikacji}{9}{subsection.2.6.3}%
+\contentsline {section}{\numberline {2.7}Kontrola dostępu i limity systemowe}{10}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Testowanie wydajności sprzętu na poziomie OS}{10}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Podsumowanie}{11}{section.2.9}%
+\contentsline {section}{\numberline {2.10}Bibliografia}{11}{section.2.10}%
+\contentsline {chapter}{\numberline {3}Projektowanie bazy danych \sphinxhyphen {} modele}{12}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Wprowadzenie}{12}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Model Konceptualny}{12}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Model Logiczny}{13}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Model Fizyczny}{13}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Przykładowe rekordy}{14}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Tabela Specialization}{14}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Tabela Doctor}{14}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}Tabela Patient}{14}{subsection.3.5.3}%
+\contentsline {subsection}{\numberline {3.5.4}Tabela Visit}{15}{subsection.3.5.4}%
+\contentsline {chapter}{\numberline {4}Analiza Bazy danych i optymalizacja zapytań}{16}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Analiza normalizacji}{16}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Potencjalne problemy wydajnościowe}{16}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Strategie optymalizacji}{16}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Prezentacja skryptów wspomagających}{17}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Wnioski}{18}{section.4.5}%
+\contentsline {chapter}{\numberline {5}Podsumowanie}{19}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Spis repozytoriów}{19}{section.5.1}%
