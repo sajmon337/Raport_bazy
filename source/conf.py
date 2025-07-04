@@ -8,6 +8,8 @@ templates_path = ['_templates']
 exclude_patterns = []
 
 html_theme = 'sphinx_rtd_theme'
+latex_toplevel_sectioning = 'chapter'
+
 
 # Ważne! Dla PDF (LaTeX)
 latex_engine = 'pdflatex'

@@ -7,4 +7,10 @@ Spis repozytoriów
 ------------------
 
 #. Sprawozdanie i kod: https://github.com/sajmon337/Raport_bazy.git
-#. Przegląd literatury: https://github.com/Broksonn/Wydajnosc_Skalowanie_i_Replikacja.git
+
+
+Badania literaturowe:
+
+#. Wydajność skalowanie i replikacja: https://github.com/Broksonn/Wydajnosc_Skalowanie_i_Replikacja.git
+#. Sprzęt dla bazy danych: https://github.com/oszczeda/Sprzet-dla-bazy-danych.git
+#. Konfiguracja baz danych: https://github.com/Chaiolites/Konfiguracja_baz_danych.git

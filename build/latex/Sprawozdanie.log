@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.2)  3 JUL 2025 21:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.2)  4 JUL 2025 17:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -893,34 +893,17 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {C:/Users/Mateusz/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Ma
 teusz/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ec.enc}]
-(Sprawozdanie.toc)
-\tf@toc=\write6
-\openout6 = `Sprawozdanie.toc'.
-
-
+(Sprawozdanie.toc
 
 [2
 
 
 
-]
-Chapter 1.
+])
+\tf@toc=\write6
+\openout6 = `Sprawozdanie.toc'.
 
 
-[3
-
-]
-Chapter 2.
-LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 1
-16.
-(C:\Users\Mateusz\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
-File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
-)
-
-[4
-
-{C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1.
-enc}]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -929,7 +912,24 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[5]
+[3]
+Chapter 1.
+
+
+[4
+
+]
+Chapter 2.
+LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 1
+21.
+(C:\Users\Mateusz\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
+File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
+)
+
+[5
+
+{C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1.
+enc}]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -975,13 +975,22 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 525--528
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 530--533
 \T1/qtm/m/n/10.95 [1] Post-greSQL Doc-u-men-ta-tion ^^U Per-for-mance Tips [][]
 $https : / / www . postgresql . org / docs / current /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 533--536
+Underfull \hbox (badness 10000) in paragraph at lines 538--541
 []\T1/qtm/m/n/10.95 [3] F. Hecht, Scal-ing Database Sys-tems [][]$https : / / w
 ww . cockroachlabs . com / docs / stable /
  []
@@ -995,24 +1004,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[11]
-Chapter 3.
-LaTeX Font Info:    Trying to load font information for T1+txtt on input line 5
-82.
-(C:\Users\Mateusz\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\t1txtt.fd
-File: t1txtt.fd 2000/12/15 v3.1
-)
-
-[12
-
-]
-LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10.95> not available
-(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 666.
-
-Overfull \vbox (2.96326pt too high) detected at line 703
- []
-
-
+[12]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1022,76 +1014,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [13]
-Underfull \hbox (badness 10000) in paragraph at lines 891--891
-[]\T1/qhv/m/n/10.95 pa-
- []
+LaTeX Font Info:    Trying to load font information for T1+txtt on input line 7
+00.
 
-
-Overfull \hbox (7.0858pt too wide) in paragraph at lines 891--891
-[]\T1/qhv/m/n/10.95 first_name| 
- []
-
-
-Overfull \hbox (5.01396pt too wide) in paragraph at lines 891--891
-[]\T1/qhv/m/n/10.95 last_name| 
- []
-
-
-Overfull \hbox (4.79414pt too wide) in paragraph at lines 891--891
-[]\T1/qhv/m/n/10.95 birth_date| 
- []
-
-
-Overfull \hbox (7.3135pt too wide) in paragraph at lines 891--891
-[]\T1/qtm/m/n/10.95 Wi±niewska| 
- []
-
-
-Overfull \hbox (8.34875pt too wide) in paragraph at lines 891--891
-[]\T1/qtm/m/n/10.95 90010112345| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 891--891
-[]\T1/qtm/m/n/10.95 1990-01-
- []
-
-
-Overfull \hbox (7.89714pt too wide) in paragraph at lines 891--891
-[][][]\T1/qtm/m/n/10.95 maria@example.com[][]| 
- []
-
-
-Overfull \hbox (9.20488pt too wide) in paragraph at lines 891--891
-[]\T1/qtm/m/n/10.95 +48123123123| 
- []
-
-
-Overfull \hbox (1.94803pt too wide) in paragraph at lines 891--891
-[]\T1/qtm/m/n/10.95 D¡browski| 
- []
-
-
-Overfull \hbox (8.34875pt too wide) in paragraph at lines 891--891
-[]\T1/qtm/m/n/10.95 85050554321| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 891--891
-[]\T1/qtm/m/n/10.95 1985-05-
- []
-
-
-Overfull \hbox (13.76633pt too wide) in paragraph at lines 891--891
-[][][]\T1/qtm/m/n/10.95 tomasz@example.com[][]| 
- []
-
-
-Overfull \hbox (9.20488pt too wide) in paragraph at lines 891--891
-[]\T1/qtm/m/n/10.95 +48987654321| 
- []
-
-
+(C:\Users\Mateusz\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\t1txtt.fd
+File: t1txtt.fd 2000/12/15 v3.1
+)
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1110,21 +1038,25 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [15]
-Chapter 4.
-
-
-[16
-
-]
 LaTeX Font Info:    Font shape `T1/txtt/m/it' in size <10.95> not available
-(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 1045.
-
+(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 822.
+LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10.95> not available
+(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 823.
 LaTeX Font Info:    Trying to load font information for TS1+txtt on input line 
-1049.
+861.
 
 (C:\Users\Mateusz\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\ts1txtt.fd
 File: ts1txtt.fd 2000/12/15 v3.1
 )
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[16]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1143,28 +1075,228 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [18]
+Underfull \hbox (badness 10000) in paragraph at lines 1148--1148
+[]\T1/qtm/m/n/10.95 main-te-
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[19]
+Underfull \hbox (badness 10000) in paragraph at lines 1297--1299
+[]\T1/qtm/m/n/10.95 Ad-min-is-tra-tor mo»e równie» kon-trolowa¢ cz¦s-totli-wo±¢
+ ak-tu-al-iza-cji statystyk (np.
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[20]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[21]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[22]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[23]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[24]
+Chapter 3.
+
+
+[25
+
+]
+Overfull \vbox (2.96326pt too high) detected at line 1870
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[26]
+Underfull \hbox (badness 10000) in paragraph at lines 2058--2058
+[]\T1/qhv/m/n/10.95 pa-
+ []
+
+
+Overfull \hbox (7.0858pt too wide) in paragraph at lines 2058--2058
+[]\T1/qhv/m/n/10.95 first_name| 
+ []
+
+
+Overfull \hbox (5.01396pt too wide) in paragraph at lines 2058--2058
+[]\T1/qhv/m/n/10.95 last_name| 
+ []
+
+
+Overfull \hbox (4.79414pt too wide) in paragraph at lines 2058--2058
+[]\T1/qhv/m/n/10.95 birth_date| 
+ []
+
+
+Overfull \hbox (7.3135pt too wide) in paragraph at lines 2058--2058
+[]\T1/qtm/m/n/10.95 Wi±niewska| 
+ []
+
+
+Overfull \hbox (8.34875pt too wide) in paragraph at lines 2058--2058
+[]\T1/qtm/m/n/10.95 90010112345| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2058--2058
+[]\T1/qtm/m/n/10.95 1990-01-
+ []
+
+
+Overfull \hbox (7.89714pt too wide) in paragraph at lines 2058--2058
+[][][]\T1/qtm/m/n/10.95 maria@example.com[][]| 
+ []
+
+
+Overfull \hbox (9.20488pt too wide) in paragraph at lines 2058--2058
+[]\T1/qtm/m/n/10.95 +48123123123| 
+ []
+
+
+Overfull \hbox (1.94803pt too wide) in paragraph at lines 2058--2058
+[]\T1/qtm/m/n/10.95 D¡browski| 
+ []
+
+
+Overfull \hbox (8.34875pt too wide) in paragraph at lines 2058--2058
+[]\T1/qtm/m/n/10.95 85050554321| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2058--2058
+[]\T1/qtm/m/n/10.95 1985-05-
+ []
+
+
+Overfull \hbox (13.76633pt too wide) in paragraph at lines 2058--2058
+[][][]\T1/qtm/m/n/10.95 tomasz@example.com[][]| 
+ []
+
+
+Overfull \hbox (9.20488pt too wide) in paragraph at lines 2058--2058
+[]\T1/qtm/m/n/10.95 +48987654321| 
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[27]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[28]
+Chapter 4.
+
+
+[29
+
+]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[30]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[31]
 Chapter 5.
 No file Sprawozdanie.ind.
 
 
-[19
+[32
 
 ] (Sprawozdanie.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-06-09>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `Sprawozdanie.out' has not changed.
-(rerunfilecheck)             Checksum: D20ED9DBAADD026B1E53456A4BC04C62;7954.
+(rerunfilecheck)             Checksum: B58352FB13F01FBB6CB5E47BC4DE1121;21841.
  ) 
 Here is how much of TeX's memory you used:
- 20365 strings out of 468221
- 368545 string characters out of 5431924
- 850901 words of memory out of 5000000
- 48411 multiletter control sequences out of 15000+600000
+ 20577 strings out of 468221
+ 377433 string characters out of 5431924
+ 855296 words of memory out of 5000000
+ 48542 multiletter control sequences out of 15000+600000
  685258 words of font info for 98 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 72i,11n,82p,1203b,667s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,12n,82p,1203b,667s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
 m/cmmi6.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 amsfonts/cm/cmsy10.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/ty
@@ -1180,9 +1312,9 @@ C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xtt
 .pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts
 /t1xtt.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/t
 xfonts/tcxtt.pfb>
-Output written on Sprawozdanie.pdf (19 pages, 286897 bytes).
+Output written on Sprawozdanie.pdf (32 pages, 372829 bytes).
 PDF statistics:
- 396 PDF objects out of 1000 (max. 8388607)
- 69 named destinations out of 1000 (max. 500000)
- 389 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 751 PDF objects out of 1000 (max. 8388607)
+ 150 named destinations out of 1000 (max. 500000)
+ 893 words of extra memory for PDF output out of 10000 (max. 10000000)
 

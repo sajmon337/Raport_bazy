@@ -1,47 +1,110 @@
 \babel@toc {english}{}\relax 
-\contentsline {chapter}{\numberline {1}Wprowadzenie}{3}{chapter.1}%
-\contentsline {chapter}{\numberline {2}Przegląd literatury}{4}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Wydajność, skalowanie i replikacja}{4}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Wstęp}{4}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Buforowanie oraz zarządzanie połączeniami}{4}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Buforowanie połączeń:}{4}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Zarządzanie połączeniami:}{5}{subsection.2.3.2}%
-\contentsline {section}{\numberline {2.4}Wydajność}{5}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Klastry oraz indeksy}{5}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}1. Współbieżność w bazach danych}{5}{subsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.4.3}2. Przepustowość bazy danych}{6}{subsection.2.4.3}%
-\contentsline {subsection}{\numberline {2.4.4}3. Responsywność bazy danych}{6}{subsection.2.4.4}%
-\contentsline {subsection}{\numberline {2.4.5}4. Zapytania N+1}{6}{subsection.2.4.5}%
-\contentsline {subsection}{\numberline {2.4.6}5. Błędy w bazach danych}{7}{subsection.2.4.6}%
-\contentsline {subsection}{\numberline {2.4.7}6. Zużycie dostępnych zasobów}{7}{subsection.2.4.7}%
-\contentsline {subsection}{\numberline {2.4.8}Prostota rozbudowy:}{7}{subsection.2.4.8}%
-\contentsline {subsection}{\numberline {2.4.9}Analityka czasu rzeczywistego:}{8}{subsection.2.4.9}%
-\contentsline {subsection}{\numberline {2.4.10}Dostępność w chmurze:}{8}{subsection.2.4.10}%
-\contentsline {subsection}{\numberline {2.4.11}Unikanie wąskich gardeł:}{8}{subsection.2.4.11}%
-\contentsline {section}{\numberline {2.5}Skalowanie}{8}{section.2.5}%
-\contentsline {section}{\numberline {2.6}Replikacja}{8}{section.2.6}%
-\contentsline {subsection}{\numberline {2.6.1}Mechanizmy replikacji}{9}{subsection.2.6.1}%
-\contentsline {subsection}{\numberline {2.6.2}Rodzaje mechanizmów replikacji}{9}{subsection.2.6.2}%
-\contentsline {subsection}{\numberline {2.6.3}Zalety i Wady replikacji}{9}{subsection.2.6.3}%
-\contentsline {section}{\numberline {2.7}Kontrola dostępu i limity systemowe}{10}{section.2.7}%
-\contentsline {section}{\numberline {2.8}Testowanie wydajności sprzętu na poziomie OS}{10}{section.2.8}%
-\contentsline {section}{\numberline {2.9}Podsumowanie}{11}{section.2.9}%
-\contentsline {section}{\numberline {2.10}Bibliografia}{11}{section.2.10}%
-\contentsline {chapter}{\numberline {3}Projektowanie bazy danych \sphinxhyphen {} modele}{12}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Wprowadzenie}{12}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Model Konceptualny}{12}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Model Logiczny}{13}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Model Fizyczny}{13}{section.3.4}%
-\contentsline {section}{\numberline {3.5}Przykładowe rekordy}{14}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Tabela Specialization}{14}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Tabela Doctor}{14}{subsection.3.5.2}%
-\contentsline {subsection}{\numberline {3.5.3}Tabela Patient}{14}{subsection.3.5.3}%
-\contentsline {subsection}{\numberline {3.5.4}Tabela Visit}{15}{subsection.3.5.4}%
-\contentsline {chapter}{\numberline {4}Analiza Bazy danych i optymalizacja zapytań}{16}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Analiza normalizacji}{16}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Potencjalne problemy wydajnościowe}{16}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Strategie optymalizacji}{16}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Prezentacja skryptów wspomagających}{17}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Wnioski}{18}{section.4.5}%
-\contentsline {chapter}{\numberline {5}Podsumowanie}{19}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Spis repozytoriów}{19}{section.5.1}%
+\contentsline {chapter}{\numberline {1}Wprowadzenie}{4}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Badania literaturowe}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Wydajność, skalowanie i replikacja}{5}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Wstęp}{5}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Buforowanie oraz zarządzanie połączeniami}{5}{subsection.2.1.2}%
+\contentsline {subsubsection}{Buforowanie połączeń:}{5}{subsubsection*.3}%
+\contentsline {subsubsection}{Zarządzanie połączeniami:}{6}{subsubsection*.4}%
+\contentsline {subsection}{\numberline {2.1.3}Wydajność}{6}{subsection.2.1.3}%
+\contentsline {subsubsection}{Klastry oraz indeksy}{6}{subsubsection*.5}%
+\contentsline {subsubsection}{1. Współbieżność w bazach danych}{6}{subsubsection*.6}%
+\contentsline {subsubsection}{2. Przepustowość bazy danych}{7}{subsubsection*.7}%
+\contentsline {subsubsection}{3. Responsywność bazy danych}{7}{subsubsection*.8}%
+\contentsline {subsubsection}{4. Zapytania N+1}{7}{subsubsection*.9}%
+\contentsline {subsubsection}{5. Błędy w bazach danych}{8}{subsubsection*.10}%
+\contentsline {subsubsection}{6. Zużycie dostępnych zasobów}{8}{subsubsection*.11}%
+\contentsline {subsubsection}{Prostota rozbudowy:}{8}{subsubsection*.12}%
+\contentsline {subsubsection}{Analityka czasu rzeczywistego:}{8}{subsubsection*.13}%
+\contentsline {subsubsection}{Dostępność w chmurze:}{9}{subsubsection*.14}%
+\contentsline {subsubsection}{Unikanie wąskich gardeł:}{9}{subsubsection*.15}%
+\contentsline {subsection}{\numberline {2.1.4}Skalowanie}{9}{subsection.2.1.4}%
+\contentsline {subsection}{\numberline {2.1.5}Replikacja}{9}{subsection.2.1.5}%
+\contentsline {subsubsection}{Mechanizmy replikacji}{9}{subsubsection*.16}%
+\contentsline {subsubsection}{Rodzaje mechanizmów replikacji}{10}{subsubsection*.17}%
+\contentsline {subsubsection}{Zalety i Wady replikacji}{10}{subsubsection*.18}%
+\contentsline {subsection}{\numberline {2.1.6}Kontrola dostępu i limity systemowe}{11}{subsection.2.1.6}%
+\contentsline {subsection}{\numberline {2.1.7}Testowanie wydajności sprzętu na poziomie OS}{11}{subsection.2.1.7}%
+\contentsline {subsection}{\numberline {2.1.8}Podsumowanie}{11}{subsection.2.1.8}%
+\contentsline {subsection}{\numberline {2.1.9}Bibliografia}{12}{subsection.2.1.9}%
+\contentsline {section}{\numberline {2.2}Sprzęt dla baz danych}{12}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Wstęp}{12}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Sprzęt dla bazy danych PostgreSQL}{12}{subsection.2.2.2}%
+\contentsline {subsubsection}{Procesor}{12}{subsubsection*.19}%
+\contentsline {subsubsection}{Pamięć operacyjna}{12}{subsubsection*.20}%
+\contentsline {subsubsection}{Przestrzeń dyskowa}{13}{subsubsection*.21}%
+\contentsline {subsubsection}{Sieć internetowa}{13}{subsubsection*.22}%
+\contentsline {subsubsection}{Zasilanie}{13}{subsubsection*.23}%
+\contentsline {subsubsection}{Chłodzenie}{13}{subsubsection*.24}%
+\contentsline {subsection}{\numberline {2.2.3}Sprzęt dla bazy danych SQLite}{13}{subsection.2.2.3}%
+\contentsline {subsubsection}{Procesor}{13}{subsubsection*.25}%
+\contentsline {subsubsection}{Pamięć operacyjna}{13}{subsubsection*.26}%
+\contentsline {subsubsection}{Przestrzeń dyskowa}{13}{subsubsection*.27}%
+\contentsline {subsubsection}{Sieć internetowa}{14}{subsubsection*.28}%
+\contentsline {subsubsection}{Zasilanie}{14}{subsubsection*.29}%
+\contentsline {subsubsection}{Chłodzenie}{14}{subsubsection*.30}%
+\contentsline {subsection}{\numberline {2.2.4}Podsumowanie}{14}{subsection.2.2.4}%
+\contentsline {section}{\numberline {2.3}Sprawozdanie: Konfiguracja i Zarządzanie Bazą Danych}{14}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}1. Konfiguracja bazy danych}{14}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}2. Lokalizacja i struktura katalogów}{14}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}3. Katalog danych}{15}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}4. Podział konfiguracji na podpliki}{15}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}5. Katalog Konfiguracyjny}{15}{subsection.2.3.5}%
+\contentsline {subsection}{\numberline {2.3.6}6. Katalog logów i struktura katalogów w PostgreSQL}{16}{subsection.2.3.6}%
+\contentsline {subsection}{\numberline {2.3.7}7. Przechowywanie i lokalizacja plików konfiguracyjnych}{16}{subsection.2.3.7}%
+\contentsline {subsection}{\numberline {2.3.8}8. Podstawowe parametry konfiguracyjne}{16}{subsection.2.3.8}%
+\contentsline {subsection}{\numberline {2.3.9}9. Wstęp teoretyczny}{17}{subsection.2.3.9}%
+\contentsline {subsubsection}{9.1 Klasyfikacja systemów zarządzania bazą danych}{17}{subsubsection*.31}%
+\contentsline {subsubsection}{9.2 SQLite}{17}{subsubsection*.32}%
+\contentsline {subsubsection}{9.3 PostgreSQL}{18}{subsubsection*.33}%
+\contentsline {subsubsection}{9.4 Cel użycia obu systemów}{18}{subsubsection*.34}%
+\contentsline {subsection}{\numberline {2.3.10}10. Zarządzanie konfiguracją w PostgreSQL}{18}{subsection.2.3.10}%
+\contentsline {subsubsection}{10.1 Pliki konfiguracyjne}{18}{subsubsection*.35}%
+\contentsline {subsubsection}{10.2 Przykładowe kluczowe parametry \sphinxstyleliteralintitle {\sphinxupquote {postgresql.conf}}}{19}{subsubsection*.36}%
+\contentsline {subsubsection}{10.3 Sposoby zmiany konfiguracji}{19}{subsubsection*.37}%
+\contentsline {subsubsection}{10.4 Sprawdzanie konfiguracji}{19}{subsubsection*.38}%
+\contentsline {subsubsection}{10.5 Narzędzia pomocnicze}{20}{subsubsection*.39}%
+\contentsline {subsubsection}{10.6 Kontrola dostępu i mechanizmy uwierzytelniania}{20}{subsubsection*.40}%
+\contentsline {subsection}{\numberline {2.3.11}11. Planowanie}{20}{subsection.2.3.11}%
+\contentsline {subsubsection}{11.1 Co to jest planowanie zapytań?}{20}{subsubsection*.41}%
+\contentsline {subsubsection}{11.2 Mechanizm planowania w PostgreSQL}{20}{subsubsection*.42}%
+\contentsline {subsubsection}{11.3 Statystyki i ich aktualizacja}{20}{subsubsection*.43}%
+\contentsline {subsubsection}{11.4 Typy planów wykonania}{21}{subsubsection*.44}%
+\contentsline {subsubsection}{11.5 Jak sprawdzić plan zapytania?}{21}{subsubsection*.45}%
+\contentsline {subsubsection}{11.6 Parametry planowania i optymalizacji}{21}{subsubsection*.46}%
+\contentsline {subsection}{\numberline {2.3.12}12. Tabele \textendash {} rozmiar, planowanie i monitorowanie}{21}{subsection.2.3.12}%
+\contentsline {subsubsection}{12.1 Rozmiar tabeli}{21}{subsubsection*.47}%
+\contentsline {subsubsection}{12.2 Planowanie rozmiaru i jego kontrola}{22}{subsubsection*.48}%
+\contentsline {subsubsection}{12.3 Monitorowanie rozmiaru tabel}{22}{subsubsection*.49}%
+\contentsline {subsubsection}{12.4 Planowanie na poziomie tabel}{22}{subsubsection*.50}%
+\contentsline {subsubsection}{12.5 Monitorowanie stanu tabel}{22}{subsubsection*.51}%
+\contentsline {subsubsection}{12.6 Konserwacja i optymalizacja tabel}{22}{subsubsection*.52}%
+\contentsline {subsection}{\numberline {2.3.13}13. Rozmiar pojedynczych tabel, rozmiar wszystkich tabel, indeksów tabeli}{23}{subsection.2.3.13}%
+\contentsline {subsubsection}{13.1 Rozmiar pojedynczej tabeli}{23}{subsubsection*.53}%
+\contentsline {subsubsection}{13.2 Rozmiar wszystkich tabel w bazie}{23}{subsubsection*.54}%
+\contentsline {subsubsection}{13.3 Rozmiar indeksów tabeli}{23}{subsubsection*.55}%
+\contentsline {subsubsection}{13.4 Znaczenie rozmiarów}{23}{subsubsection*.56}%
+\contentsline {subsection}{\numberline {2.3.14}14. Rozmiar}{24}{subsection.2.3.14}%
+\contentsline {subsubsection}{14.1 Rodzaje rozmiarów w PostgreSQL}{24}{subsubsection*.57}%
+\contentsline {subsubsection}{14.2 Monitorowanie i kontrola rozmiaru}{24}{subsubsection*.58}%
+\contentsline {subsubsection}{14.3 Optymalizacja rozmiaru}{24}{subsubsection*.59}%
+\contentsline {subsubsection}{14.4 Znaczenie zarządzania rozmiarem}{24}{subsubsection*.60}%
+\contentsline {subsection}{\numberline {2.3.15}Podsumowanie}{24}{subsection.2.3.15}%
+\contentsline {chapter}{\numberline {3}Projektowanie bazy danych \sphinxhyphen {} modele}{25}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Wprowadzenie}{25}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Model Konceptualny}{25}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Model Logiczny}{26}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Model Fizyczny}{26}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Przykładowe rekordy}{27}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Tabela Specialization}{27}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Tabela Doctor}{27}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}Tabela Patient}{27}{subsection.3.5.3}%
+\contentsline {subsection}{\numberline {3.5.4}Tabela Visit}{28}{subsection.3.5.4}%
+\contentsline {chapter}{\numberline {4}Analiza Bazy danych i optymalizacja zapytań}{29}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Analiza normalizacji}{29}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Potencjalne problemy wydajnościowe}{29}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Strategie optymalizacji}{29}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Prezentacja skryptów wspomagających}{30}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Wnioski}{31}{section.4.5}%
+\contentsline {chapter}{\numberline {5}Podsumowanie}{32}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Spis repozytoriów}{32}{section.5.1}%

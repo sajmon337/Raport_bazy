@@ -10,3 +10,12 @@
 [submodule "source/rozdzial2/Wydajnosc_Skalowanie_i-Replikacja"]
 	path = source/rozdzial2/Wydajnosc_Skalowanie_i-Replikacja
 	url = https://github.com/Broksonn/Wydajnosc_Skalowanie_i_Replikacja.git
+[submodule "source/rozdzial2/Wydajnosc-Skalowanie-i-Replikacja"]
+	path = source/rozdzial2/Wydajnosc-Skalowanie-i-Replikacja
+	url = https://github.com/Broksonn/Wydajnosc_Skalowanie_i_Replikacja.git
+[submodule "source/rozdzial2/Sprzet-dla-bazy-danych"]
+	path = source/rozdzial2/Sprzet-dla-bazy-danych
+	url = https://github.com/oszczeda/Sprzet-dla-bazy-danych.git
+[submodule "source/rozdzial2/Konfiguracja_baz_danych"]
+	path = source/rozdzial2/Konfiguracja_baz_danych
+	url = https://github.com/Chaiolites/Konfiguracja_baz_danych.git
