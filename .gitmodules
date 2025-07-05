@@ -19,3 +19,18 @@
 [submodule "source/rozdzial2/Konfiguracja_baz_danych"]
 	path = source/rozdzial2/Konfiguracja_baz_danych
 	url = https://github.com/Chaiolites/Konfiguracja_baz_danych.git
+[submodule "source/rozdzial2/Kontrola_i_konserwacja"]
+	path = source/rozdzial2/Kontrola_i_konserwacja
+	url = https://github.com/Pi0trM/Kontrola_i_konserwacja.git
+[submodule "source/rozdzial2/Partycjonowanie-danych"]
+	path = source/rozdzial2/Partycjonowanie-danych
+	url = https://github.com/BartekHen/Partycjonowanie-danych.git
+[submodule "source/rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych"]
+	path = source/rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych
+	url = https://github.com/m-smieja/Kopie_zapasowe_i_odzyskiwanie_danych.git
+[submodule "source/rozdzial2/Monitorowanie-i-diagnostyka"]
+	path = source/rozdzial2/Monitorowanie-i-diagnostyka
+	url = https://github.com/GrzegorzSzczepanek/repo-wspolne.git
+[submodule "source/rozdzial2/Bezpieczenstwo"]
+	path = source/rozdzial2/Bezpieczenstwo
+	url = https://github.com/BlazejUl/bezpieczenstwo.git

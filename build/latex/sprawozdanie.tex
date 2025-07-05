@@ -63,7 +63,7 @@
 
 
 \title{Sprawozdanie}
-\date{Jul 04, 2025}
+\date{Jul 05, 2025}
 \release{1.0}
 \author{Mateusz Brokos, Szymon Blatkowski}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -1723,6 +1723,2749 @@ Zarządzanie konfiguracją bazy danych PostgreSQL, optymalizacja zapytań oraz m
 \sphinxstepscope
 
 
+\section{Bezpieczeństwo}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:bezpieczenstwo}}\label{\detokenize{rozdzial2/Bezpieczenstwo/index::doc}}\begin{quote}\begin{description}
+\sphinxlineitem{Autorzy}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Katarzyna Tarasek
+
+\item {} 
+\sphinxAtStartPar
+Błażej Uliasz
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+
+\subsection{1. pg\_hba.conf — opis pliku konfiguracyjnego PostgreSQL}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:pg-hba-conf-opis-pliku-konfiguracyjnego-postgresql}}
+\sphinxAtStartPar
+Plik \sphinxcode{\sphinxupquote{pg\_hba.conf}} (skrót od \sphinxstyleemphasis{PostgreSQL Host\sphinxhyphen{}Based Authentication}) kontroluje, kto może się połączyć z bazą danych PostgreSQL, skąd, i w jaki sposób ma zostać uwierzytelniony.
+
+
+\subsubsection{Format pliku}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:format-pliku}}
+\sphinxAtStartPar
+Każdy wiersz odpowiada jednej regule dostępu:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{o}{\PYGZlt{}}\PYG{n}{typ}\PYG{o}{\PYGZgt{}}  \PYG{o}{\PYGZlt{}}\PYG{n}{baza} \PYG{n}{danych}\PYG{o}{\PYGZgt{}}  \PYG{o}{\PYGZlt{}}\PYG{n}{użytkownik}\PYG{o}{\PYGZgt{}}  \PYG{o}{\PYGZlt{}}\PYG{n}{adres}\PYG{o}{\PYGZgt{}}  \PYG{o}{\PYGZlt{}}\PYG{n}{metoda}\PYG{o}{\PYGZgt{}}  \PYG{p}{[}\PYG{n}{opcje}\PYG{p}{]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Opis elementów:
+
+
+\subsubsection{Znaczenie Elementów}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:znaczenie-elementow}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\textless{}typ\textgreater{}}} — Typ połączenia \textendash{} np. \sphinxcode{\sphinxupquote{local}}, \sphinxcode{\sphinxupquote{host}}, \sphinxcode{\sphinxupquote{hostssl}}, \sphinxcode{\sphinxupquote{hostnossl}}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\textless{}baza\textgreater{}}} — Nazwa bazy danych, do której ma być dostęp \textendash{} konkretna lub \sphinxcode{\sphinxupquote{all}}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\textless{}użytkownik\textgreater{}}} — Nazwa użytkownika PostgreSQL lub \sphinxcode{\sphinxupquote{all}}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\textless{}adres\textgreater{}}} — Adres IP lub zakres CIDR klienta (np. \sphinxcode{\sphinxupquote{192.168.1.0/24}}); pomijany dla \sphinxcode{\sphinxupquote{local}}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{\textless{}metoda\textgreater{}}} — Metoda uwierzytelnienia \textendash{} np. \sphinxcode{\sphinxupquote{md5}}, \sphinxcode{\sphinxupquote{trust}}, \sphinxcode{\sphinxupquote{scram\sphinxhyphen{}sha\sphinxhyphen{}256}}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{{[}opcje{]}}} — Opcjonalne dodatkowe parametry (np. \sphinxcode{\sphinxupquote{clientcert=1}})
+
+\end{itemize}
+
+
+\subsubsection{Typy połączeń}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:typy-polaczen}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{local}} — Umożliwia połączenia \sphinxstylestrong{lokalne przez Unix socket} (pliki specjalne w systemie plików, np. \sphinxcode{\sphinxupquote{/var/run/postgresql/.s.PGSQL.5432}}).
+Ten tryb jest dostępny \sphinxstylestrong{tylko na systemach Unix/Linux} i ignoruje pole \sphinxcode{\sphinxupquote{\textless{}adres\textgreater{}}}.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{host}} — Oznacza połączenia \sphinxstylestrong{przez TCP/IP}, niezależnie od tego, czy klient znajduje się na tym samym hoście, czy w sieci.
+Wymaga podania adresu IP lub zakresu IP (w polu \sphinxcode{\sphinxupquote{\textless{}adres\textgreater{}}}).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{hostssl}} — Jak \sphinxcode{\sphinxupquote{host}}, ale \sphinxstylestrong{wymusza użycie SSL/TLS}. Połączenia bez szyfrowania będą odrzucone.
+Wymaga, aby serwer PostgreSQL był poprawnie skonfigurowany do obsługi SSL (np. pliki \sphinxcode{\sphinxupquote{server.crt}}, \sphinxcode{\sphinxupquote{server.key}}).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{hostnossl}} — Jak \sphinxcode{\sphinxupquote{host}}, ale \sphinxstylestrong{odrzuca połączenia przez SSL/TLS}. Działa tylko dla połączeń nieszyfrowanych.
+Może być używane do rozróżnienia reguł dla klientów z/do SSL i bez SSL.
+
+\end{itemize}
+
+
+\subsubsection{Metody uwierzytelniania}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:metody-uwierzytelniania}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{trust}} — brak uwierzytelnienia (niezalecane!)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{md5}} — Klient musi podać hasło, które jest przesyłane jako skrót MD5.
+To popularna metoda w starszych wersjach PostgreSQL, ale obecnie uznawana za przestarzałą (choć nadal obsługiwana).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{scram\sphinxhyphen{}sha\sphinxhyphen{}256}} — Nowoczesna, bezpieczna metoda uwierzytelniania oparta na protokole SCRAM i algorytmie SHA\sphinxhyphen{}256.
+Zalecana w produkcji od PostgreSQL 10 wzwyż. Wymaga, aby hasła w systemie były zapisane jako SCRAM, a nie MD5.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{peer}} — Tylko dla połączeń \sphinxcode{\sphinxupquote{local}}. Sprawdza, czy nazwa użytkownika systemowego (OS) pasuje do użytkownika PostgreSQL.
+Stosowane w systemach Unix/Linux.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{ident}} — Tylko dla połączeń TCP/IP. Wymaga usługi ident (lub pliku mapowania ident), aby ustalić, kto próbuje się połączyć.
+Bardziej złożona i rzadziej używana niż \sphinxcode{\sphinxupquote{peer}}.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{reject}} — Zawsze odrzuca połączenie. Może być użyte do celowego blokowania określonych adresów lub użytkowników.
+
+\end{itemize}
+
+
+\subsubsection{Przykładowy wpis}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:przykladowy-wpis}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} 1. Lokalny dostęp bez hasła}
+\PYG{n}{local}   \PYG{n+nb}{all}             \PYG{n}{postgres}                                \PYG{n}{peer}
+\end{sphinxVerbatim}
+
+
+\subsubsection{Zmiany i przeładowanie}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:zmiany-i-przeladowanie}}
+\sphinxAtStartPar
+Po zmianach w pliku należy przeładować konfigurację PostgreSQL:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{pg\PYGZus{}ctl} \PYG{n}{reload}
+\PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZhy{}} \PYG{n}{lub}\PYG{p}{:}
+\PYG{n}{SELECT} \PYG{n}{pg\PYGZus{}reload\PYGZus{}conf}\PYG{p}{(}\PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+
+\subsection{2. Uprawnienia użytkownika}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:uprawnienia-uzytkownika}}
+\sphinxAtStartPar
+PostgreSQL pozwala na bardzo precyzyjne zarządzanie uprawnieniami użytkowników lub roli poprzez wiele poziomów dostępu — od globalnych uprawnień systemowych, przez bazy danych, aż po pojedyncze kolumny w tabelach.
+
+
+\subsubsection{Poziom systemowy}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:poziom-systemowy}}
+\sphinxAtStartPar
+To najwyższy poziom uprawnień, nadawany roli jako atrybut. Dotyczy całego klastra PostgreSQL:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{SUPERUSER} — Pełna kontrola nad serwerem, obejmuje wszystkie uprawnienia
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{CREATEDB} — Możliwość tworzenia nowych baz danych
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{CREATEROLE} — Tworzenie i zarządzanie rolami/użytkownikami
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{REPLICATION} — Umożliwia replikację danych (logiczna/strumieniowa)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{BYPASSRLS} — Omija polityki RLS (Row\sphinxhyphen{}Level Security)
+
+\end{itemize}
+
+
+\subsubsection{Poziom bazy danych}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:poziom-bazy-danych}}
+\sphinxAtStartPar
+Uprawnienia do konkretnej bazy danych:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{CONNECT} — Pozwala na połączenie z bazą danych
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{CREATE} — Pozwala na tworzenie schematów w tej bazie
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{TEMP} — Możliwość tworzenia tymczasowych tabel
+
+\end{itemize}
+
+
+\subsubsection{Poziom schematu}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:poziom-schematu}}
+\sphinxAtStartPar
+Schemat (np. \sphinxtitleref{public}) to kontener na tabele, funkcje, typy. Uprawnienia:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{USAGE} — Umożliwia dostęp do schematu (bez tego SELECT/INSERT nie zadziała)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{CREATE} — Pozwala tworzyć obiekty (np. tabele) w schemacie
+
+\end{itemize}
+
+
+\subsubsection{Poziom tabeli}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:poziom-tabeli}}
+\sphinxAtStartPar
+Uprawnienia do całej tabeli :
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{SELECT} — Odczyt danych
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{INSERT} — Wstawianie danych
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{UPDATE} — Modyfikacja danych
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{DELETE} — Usuwanie danych
+
+\end{itemize}
+
+
+\subsubsection{Przykład}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:przyklad}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{GRANT} \PYG{n}{SELECT}\PYG{p}{,} \PYG{n}{UPDATE} \PYG{n}{ON} \PYG{n}{employees} \PYG{n}{TO} \PYG{n}{hr\PYGZus{}team}\PYG{p}{;}
+\PYG{n}{REVOKE} \PYG{n}{DELETE} \PYG{n}{ON} \PYG{n}{employees} \PYG{n}{FROM} \PYG{n}{kontraktorzy}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+
+\subsection{3. Zarządzanie użytkownikami a dane wprowadzone}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:zarzadzanie-uzytkownikami-a-dane-wprowadzone}}
+\sphinxAtStartPar
+Zarządzanie użytkownikami w PostgreSQL dotyczy tworzenia, usuwania i modyfikowania użytkowników. Sytuacja na którą trzeba tutaj zwrócić uwagę jest usuwanie użytkonika ale pozostawienie danych, które wprowadził.
+
+
+\subsubsection{Tworzenie i modyfikacja użytkowników}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:tworzenie-i-modyfikacja-uzytkownikow}}
+\sphinxAtStartPar
+Do tworzenia nowych użytkowników używamy polecenia \sphinxcode{\sphinxupquote{CREATE USER}}. Do modyfikowania użytkowników, którzy już istnieją, używamy polecenia \sphinxcode{\sphinxupquote{ALETER USER}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{CREATE} \PYG{n}{USER} \PYG{n}{username} \PYG{n}{WITH} \PYG{n}{PASSWORD} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{password}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{;}
+\PYG{n}{ALTER} \PYG{n}{USER} \PYG{n}{username} \PYG{n}{WITH} \PYG{n}{PASSWORD} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{new\PYGZus{}password}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+
+\subsubsection{Usuwanie użytkowników}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:usuwanie-uzytkownikow}}
+\sphinxAtStartPar
+Do usuwania użytkowników, używamy polecenia {\color{red}\bfseries{}\textasciigrave{}\textasciigrave{}}DROP USER\textasciigrave{}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{DROP} \PYG{n}{USER} \PYG{n}{username}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Dane wprowadzone przez uśytkownika np. za pomocą polecenia \sphinxcode{\sphinxupquote{INSERT}} pozostają, nawet jeśli jego konto zostało usunięte.
+
+
+\subsubsection{Usunięcie użytkownika, a dane które posiadał}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:usuniecie-uzytkownika-a-dane-ktore-posiadal}}
+\sphinxAtStartPar
+Po usunięciu używtkonika dane, które posiadał nie są automatycznie usuwane. Dane te pozostają w bazie danych ale stają się “niedostępne” dla tego użytkownika. Aby się ich pozbyć, musi to zrobić użytkownik który ma do nich uprawnienia, korzystając z plecenia \sphinxcode{\sphinxupquote{DROP}}.
+
+
+\subsubsection{Usunięcie użytkowników, a obietky}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:usuniecie-uzytkownikow-a-obietky}}
+\sphinxAtStartPar
+Usuniecie użytkownika, który jest właścicielem obiektów, wygląda inaczej niż przy wcześniejszych danych. Jeżeli użytkownik jest właścicielem jakiegoś obiektu, to jego usunięcie skutkuje błędem:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{ERROR}\PYG{p}{:} \PYG{n}{role} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{username}\PYG{l+s+s2}{\PYGZdq{}} \PYG{n}{cannot} \PYG{n}{be} \PYG{n}{droped} \PYG{n}{becouse} \PYG{n}{some} \PYG{n}{objects} \PYG{n}{depend} \PYG{n}{on} \PYG{n}{it}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Aby zapobiec takim błędom stosujemy poniższe rozwiazanie:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{REASSIGN} \PYG{n}{OWNED} \PYG{n}{BY} \PYG{n}{username} \PYG{n}{TO} \PYG{n}{nowa\PYGZus{}rola}\PYG{p}{;}
+\PYG{n}{DROP} \PYG{n}{OWNER} \PYG{n}{BY} \PYG{n}{username}\PYG{p}{;}
+\PYG{n}{DROP} \PYG{n}{ROLE} \PYG{n}{username}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+
+\subsection{4. Zabezpieczenie połączenia przez SSL/TLS}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:zabezpieczenie-polaczenia-przez-ssl-tls}}
+\sphinxAtStartPar
+TLS (Transport Layer Security) i jego poprzednik SSL (Secure Sockets Layer) to kryptograficzne protokoły służące do zabezpieczania połączeń sieciowych. W PostgreSQL służą one do szyfrowania transmisji danych pomiędzy klientem a serwerem, uniemożliwiając podsłuch, modyfikację lub podszywanie się pod jedną ze stron.
+
+
+\subsubsection{Konfiguracja SSL/TLS w PostgreSQL}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:konfiguracja-ssl-tls-w-postgresql}}
+\sphinxAtStartPar
+Konfiguracja serwera: musimy edytować dwa pliki i zrestartować serwer PostgreSQL. Plik \sphinxcode{\sphinxupquote{postgresql.conf}}:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{ssl} \PYG{o}{=} \PYG{n}{on}
+\PYG{n}{ssl\PYGZus{}cert\PYGZus{}file} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{server.crt}\PYG{l+s+s1}{\PYGZsq{}}
+\PYG{n}{ssl\PYGZus{}key\PYGZus{}file} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{server.key}\PYG{l+s+s1}{\PYGZsq{}}
+\PYG{n}{ssl\PYGZus{}ca\PYGZus{}file} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{root.crt}\PYG{l+s+s1}{\PYGZsq{}}
+\PYG{n}{ssl\PYGZus{}min\PYGZus{}protocol\PYGZus{}version} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{TLSv1.3}\PYG{l+s+s1}{\PYGZsq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+oraz ‘’pg\_hba.conf’’:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{hostssl} \PYG{n+nb}{all} \PYG{n+nb}{all} \PYG{l+m+mf}{0.0}\PYG{l+m+mf}{.0}\PYG{l+m+mf}{.0}\PYG{o}{/}\PYG{l+m+mi}{0} \PYG{n}{cert}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Generowanie certyfikatów: jeśli nie używamy komercyjnego CA, możemy sami go wygerenować, a pomocą poniższych komend:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{openssl} \PYG{n}{genrsa} \PYG{o}{\PYGZhy{}}\PYG{n}{out} \PYG{n}{server}\PYG{o}{.}\PYG{n}{key} \PYG{l+m+mi}{2048}
+\PYG{n}{openssl} \PYG{n}{req} \PYG{o}{\PYGZhy{}}\PYG{n}{new} \PYG{o}{\PYGZhy{}}\PYG{n}{key} \PYG{n}{server}\PYG{o}{.}\PYG{n}{key} \PYG{o}{\PYGZhy{}}\PYG{n}{out} \PYG{n}{server}\PYG{o}{.}\PYG{n}{csr}
+\PYG{n}{openssl} \PYG{n}{x509} \PYG{o}{\PYGZhy{}}\PYG{n}{req} \PYG{o}{\PYGZhy{}}\PYG{n}{days} \PYG{l+m+mi}{365} \PYG{o}{\PYGZhy{}}\PYG{o+ow}{in} \PYG{n}{server}\PYG{o}{.}\PYG{n}{csr} \PYG{o}{\PYGZhy{}}\PYG{n}{signkey} \PYG{n}{server}\PYG{o}{.}\PYG{n}{key} \PYG{o}{\PYGZhy{}}\PYG{n}{out} \PYG{n}{server}\PYG{o}{.}\PYG{n}{crt}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Konfiguracja klienta: parametry SSL, których możemy użyć.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{sslmode}} \sphinxhyphen{} kontroluje wymuszanie i weryfikację SSL (\sphinxcode{\sphinxupquote{require}}, \sphinxcode{\sphinxupquote{verify\sphinxhyphen{}ca}}, \sphinxcode{\sphinxupquote{verify\sphinxhyphen{}full}})
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{sslcert}} \sphinxhyphen{} ścieżka do certyfikatu klienta (jeśli wymagane uwierzytelnienie certyfikatem)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{sslkey}} \sphinxhyphen{}  klucz prywatny klienta
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{sslrootcert}} \sphinxhyphen{} certyfikat CA do weryfikacji certyfikatu serwera
+
+\end{itemize}
+
+
+\subsubsection{Monitorowanie i testowanie SSL/TLS}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:monitorowanie-i-testowanie-ssl-tls}}
+\sphinxAtStartPar
+Sprawdzenie czy połączenie jest szyfrowanie w PostgreSQL wystarczy użyć prostego polecenia \sphinxcode{\sphinxupquote{SELECT ssl\_is\_used();}}. Jeśli jednak chcemy dostać więcej informacji, musimy wpisać poniższe polecenia:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{SELECT} \PYG{n}{datname}\PYG{p}{,} \PYG{n}{usename}\PYG{p}{,} \PYG{n}{ssl}\PYG{p}{,} \PYG{n}{client\PYGZus{}addr}\PYG{p}{,} \PYG{n}{application\PYGZus{}name}\PYG{p}{,} \PYG{n}{backend\PYGZus{}type}
+\PYG{n}{FROM} \PYG{n}{pg\PYGZus{}stat\PYGZus{}ssl}
+\PYG{n}{JOIN} \PYG{n}{pg\PYGZus{}stat\PYGZus{}activity} \PYG{n}{ON} \PYG{n}{pg\PYGZus{}stat\PYGZus{}ssl}\PYG{o}{.}\PYG{n}{pid} \PYG{o}{=} \PYG{n}{pg\PYGZus{}stat\PYGZus{}activity}\PYG{o}{.}\PYG{n}{pid}
+\PYG{n}{ORDER} \PYG{n}{BY} \PYG{n}{ssl}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Testowanie z poziomu terminala pozwala podejrzeć szczegóły TLS takie jak certyfikaty, wesję protokołu czy użyty szyft. Wpisujemy poniższą komendę:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{openssl} \PYG{n}{s\PYGZus{}client} \PYG{o}{\PYGZhy{}}\PYG{n}{starttls} \PYG{n}{postgres} \PYG{o}{\PYGZhy{}}\PYG{n}{connect} \PYG{n}{example}\PYG{o}{.}\PYG{n}{com}\PYG{p}{:}\PYG{l+m+mi}{5432} \PYG{o}{\PYGZhy{}}\PYG{n}{showcerts}
+\end{sphinxVerbatim}
+
+
+\subsection{5. Szyfrowanie danych}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:szyfrowanie-danych}}
+\sphinxAtStartPar
+Szyfrowanie danych w PostgreSQL odgrywa kluczową rolę w zapewnianiu poufności, integralności i ochrony danych przed nieautoryzowanym dostępem. Można je realizować na różnych poziomach: transmisji (in\sphinxhyphen{}transit), przechowywania (at\sphinxhyphen{}rest) oraz aplikacyjnym.
+
+
+\subsubsection{Szyfrowanie transmisji}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:szyfrowanie-transmisji}}
+\sphinxAtStartPar
+Korzystając z technologi SSL/TLS chroni dane przesyłane pomiędzy klientem, a serwerem przed podsłuchiwaniem lub modyfikacją. Wymaga konfiguracji serwera PostgreSQL do obsługi SSL oraz klienci muszą łączyć się przez SSL.
+
+
+\subsubsection{Szyfrowanie całego dysku}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:szyfrowanie-calego-dysku}}
+\sphinxAtStartPar
+Dane są szyfrowane na poziomie systemu operacyjnego lub warstwy przechowywania. Stosowanymi roziazaniami jest LUKS, BitLocker, szyfrowanie oferowane przez chmury. Zaletami tego szyfrowania jest transparentność dla PostgrSQL i łatwość w implementacji. Wadami za to jest brak selektywnego szyfrowania oraz fakt, że jeśli system jest aktywny to dane są odszyfrowane i dostępne.
+
+
+\subsubsection{Szyfrowanie na poziomie kolumn z użyciem pgcrypto}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:szyfrowanie-na-poziomie-kolumn-z-uzyciem-pgcrypto}}
+\sphinxAtStartPar
+Pozwala na szyfrowanie konkretnych kolumn danych. Rozszerzenie to \sphinxcode{\sphinxupquote{pgcrypto}}. Funkcje takiego szyfrowania to:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+symetryczne szyfrowanie
+
+\end{itemize}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{SELECT} \PYG{n}{pgp\PYGZus{}sym\PYGZus{}encrypt}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{tajne dane}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{haslo}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{n}{SELECT} \PYG{n}{pgp\PYGZus{}sym\PYGZus{}decrypt}\PYG{p}{(}\PYG{n}{kolumna}\PYG{p}{:}\PYG{p}{:}\PYG{n}{bytea}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{haslo}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+asymetryczne szyfrowanie (z uśyciem kluczy publicznych/prywatnych)
+
+\item {} 
+\sphinxAtStartPar
+haszowanie
+
+\end{itemize}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{SELECT} \PYG{n}{digest}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{haslo}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{sha256}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Zaletami tego szyfrowania jest duża elastyczność i selektywne szyfrowanie. Wadami zaś wydajność i konieczność zarządzania kluczami w aplikacji.
+
+
+\subsubsection{Szyfrowanie na poziomie aplikacji}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:szyfrowanie-na-poziomie-aplikacji}}
+\sphinxAtStartPar
+Dane są szyfrowane przed zapisaniem do bazy danych i odszyfrowywane po odczycie. Używane biblioteki:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Python \textendash{} cryptography, pycryptodome,
+
+\item {} 
+\sphinxAtStartPar
+Java \textendash{} javax.crypto, Bouncy Castle,
+
+\item {} 
+\sphinxAtStartPar
+JavaScript \textendash{} crypto, sjcl.
+
+\end{itemize}
+
+\sphinxAtStartPar
+Zaletami jest pełna kontrola nad szyfrowaniem oraz fakt, że dane są chronione nawet w razie włamania do bazy. Wadami zaś trudniejsze wyszukiwanie i indeksowanie, konieczność przeniesienia odpowiedzialności za bezpieczeństwo do aplikacji oraz problemy ze zgodnością przy migracjach danych.
+
+
+\subsubsection{Zarządzanie kluczami szyfrującymi}
+\label{\detokenize{rozdzial2/Bezpieczenstwo/index:zarzadzanie-kluczami-szyfrujacymi}}
+\sphinxAtStartPar
+Niezależnie od rodzaju szyfrowania, bezpieczne zarządzanie kluczami jest kluczowe dla ochrony danych. Klucze powinny być generowane, przechowywane, dystrybuowane i niszczone w sposób bezpieczny. Potrzebne są do tego odpowiednie narzędzia. Rekomendowanymi narzędziami do bezpiecznego zarządzania kluczami są:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Sprzętowe moduły bezpieczeństwa (HSM) \sphinxhyphen{} Urządzenia te oferują bezpieczne środowisko do generowania, przechowywania i zarządzania kluczami. HSM\sphinxhyphen{}y są odporne na fizyczne ataki i zapewniają wysoki poziom bezpieczeństwa.
+
+\item {} 
+\sphinxAtStartPar
+Systemy zarządzania kluczami (KMS) \sphinxhyphen{} KMS to oprogramowanie, które centralizuje zarządzanie kluczami, umożliwiając ich bezpieczne przechowywanie, rotację i dystrybucję.
+
+\item {} 
+\sphinxAtStartPar
+Narzędzia do bezpiecznej komunikacji \sphinxhyphen{} Narzędzia takie jak Signal czy WhatsApp oferują szyfrowanie end\sphinxhyphen{}to\sphinxhyphen{}end, które chroni komunikację przed nieautoryzowanym dostępem.
+
+\item {} 
+\sphinxAtStartPar
+Narzędzia do szyfrowania dysków \sphinxhyphen{} Takie jak BitLocker czy FileVault, które pozwalają na zaszyfrowanie całego dysku twardego lub jego partycji.
+
+\end{itemize}
+
+\sphinxstepscope
+
+
+\section{Monitorowanie i diagnostyka}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:monitorowanie-i-diagnostyka}}\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index::doc}}\begin{quote}\begin{description}
+\sphinxlineitem{Autorzy}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Dominika Półchłopek
+
+\item {} 
+\sphinxAtStartPar
+Kacper Rasztar
+
+\item {} 
+\sphinxAtStartPar
+Grzegorz Szczepanek
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+
+\subsection{Wstęp}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:wstep}}
+\sphinxAtStartPar
+Monitorowanie i diagnostyka baz danych PostgreSQL stanowią fundamentalne elementy zapewniające wydajność, bezpieczeństwo oraz stabilność środowiska produkcyjnego. Nowoczesne rozwiązania monitorowania umożliwiają administratorom proaktywne wykrywanie problemów, optymalizację wydajności oraz zapewnienie zgodności z przepisami bezpieczeństwa. Efektywne monitorowanie PostgreSQL obejmuje szeroki zakres metryk \sphinxhyphen{} od aktywności sesji użytkowników, przez analizę operacji na danych, po szczegółowe śledzenie logów systemowych i zasobów na poziomie systemu operacyjnego.
+
+
+\subsection{Monitorowanie   Sesji   i       Użytkowników}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:monitorowanie-sesji-i-uzytkownikow}}
+
+\subsubsection{Analiza Aktywności      Użytkowników}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:analiza-aktywnosci-uzytkownikow}}
+\sphinxAtStartPar
+Systematyczne obserwowanie działań wykonywanych przez użytkowników bazy danych stanowi podstawę skutecznego monitorowania PostgreSQL. Kluczowym narzędziem w tym obszarze jest widok systemowy pg\_stat\_activity, który umożliwia śledzenie bieżących zapytań, czasu ich trwania oraz identyfikowanie użytkowników i aplikacji korzystających z bazy. Widok pg\_stat\_activity przedstawia informacje o aktywnych procesach serwera wraz ze szczegółami dotyczącymi powiązanych sesji użytkowników i zapytań. Każdy wiersz w tym widoku reprezentuje proces serwera z danymi o bieżącym stanie połączenia bazy danych.
+
+\sphinxAtStartPar
+Praktyczne zastosowanie pg\_stat\_activity obejmuje monitorowanie aktywności w czasie rzeczywistym oraz generowanie powiadomień w przypadku wykrycia nieprawidłowości. Narzędzia takie jak pgAdmin, Zabbix czy Prometheus wykorzystują te dane do wizualizacji i automatyzacji procesów monitorowania. Administratorzy mogą wykorzystywać proste zapytania SQL do analizy aktywności, na przykład: “SELECT * FROM pg\_stat\_activity;” pozwala na wyświetlenie wszystkich aktywnych sesji.
+
+
+\subsubsection{Zarządzanie     Zasobami        i       Limity}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:zarzadzanie-zasobami-i-limity}}
+\sphinxAtStartPar
+Efektywne zarządzanie zasobami w PostgreSQL opiera się na odpowiedniej konfiguracji parametrów systemowych takich jak max\_connections czy work\_mem, które kontrolują liczbę jednoczesnych połączeń i wykorzystanie pamięci. Monitorowanie wykorzystania zasobów realizowane jest poprzez narzędzia systemowe jak top, htop, vmstat czy iostat w środowisku Linux, a także dedykowane rozwiązania do monitorowania baz danych.
+
+\sphinxAtStartPar
+Kluczowe metryki obejmują współczynnik trafień cache’u, który powinien utrzymywać się powyżej 99\% dla systemów produkcyjnych. Zapytanie sprawdzające ten wskaźnik: “SELECT sum(heap\_blks\_hit) / (sum(heap\_blks\_hit) + sum(heap\_blks\_read)) as ratio FROM pg\_statio\_user\_tables;” pozwala na ocenę efektywności wykorzystania pamięci.
+
+
+\subsubsection{Wykrywanie      Problemów       z       Blokadami}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:wykrywanie-problemow-z-blokadami}}
+\sphinxAtStartPar
+Identyfikacja i analiza blokad stanowi istotny element zapewniający płynność działania aplikacji. PostgreSQL udostępnia widok pg\_locks umożliwiający śledzenie blokad i konfliktów między transakcjami. Specjalistyczne narzędzia jak pganalyze oferują zaawansowane funkcje monitorowania blokad z automatycznym wykrywaniem sytuacji deadlock oraz powiadomieniami o potencjalnych zagrożeniach .
+
+\sphinxAtStartPar
+Podstawowe zapytanie do identyfikacji nieprzyznanych blokad: “SELECT relation::regclass, * FROM pg\_locks WHERE NOT granted;” pozwala na szybkie wykrycie problemów. Bardziej zaawansowane analizy wymagają łączenia informacji z widoków pg\_locks i pg\_stat\_activity w celu identyfikacji procesów blokujących i blokowanych.
+
+
+\subsection{Monitorowanie   Dostępu do      Tabel   i       Operacji        na      Danych}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:monitorowanie-dostepu-do-tabel-i-operacji-na-danych}}
+
+\subsubsection{Analiza Użycia  Danych}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:analiza-uzycia-danych}}
+\sphinxAtStartPar
+Administratorzy baz danych wykorzystują narzędzia monitorujące takie jak pg\_stat\_user\_tables w PostgreSQL do zrozumienia wzorców wykorzystania tabel oraz identyfikacji najczęściej wykonywanych operacji. Analiza tych danych pozwala zidentyfikować najbardziej obciążone tabele, ocenić rozkład ruchu oraz przewidzieć przyszłe potrzeby związane z rozbudową infrastruktury.
+
+\sphinxAtStartPar
+Narzędzia do wizualizacji jak Grafana czy Prometheus umożliwiają prezentację trendów w użyciu tabel i pomagają w planowaniu optymalizacji. Kompleksowe monitorowanie obejmuje śledzenie operacji SELECT, INSERT, UPDATE, DELETE oraz analizę wzorców dostępu do danych w różnych okresach czasowych.
+
+
+\subsubsection{Wykrywanie Nieprawidłowych Zapytań}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:wykrywanie-nieprawidlowych-zapytan}}
+\sphinxAtStartPar
+Do wykrywania zapytań o długim czasie wykonania lub wysokim zużyciu zasobów wykorzystuje się rozszerzenie pg\_stat\_statements, które pozwala monitorować wydajność zapytań, analizować plany wykonania i identyfikować operacje wymagające optymalizacji. Moduł pg\_stat\_statements zapewnia śledzenie statystyk planowania i wykonania wszystkich instrukcji SQL wykonywanych przez serwer.
+
+\sphinxAtStartPar
+Konfiguracja pg\_stat\_statements wymaga dodania modułu do shared\_preload\_libraries w postgresql.conf oraz restartu serwera. Widok pg\_stat\_statements zawiera po jednym wierszu dla każdej unikalnej kombinacji identyfikatora bazy danych, użytkownika i zapytania, do maksymalnej liczby różnych instrukcji, które moduł może śledzić.
+
+
+\subsubsection{Bezpieczeństwo i Zgodność}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:bezpieczenstwo-i-zgodnosc}}
+\sphinxAtStartPar
+Śledzenie dostępu do tabel jest kluczowe z punktu widzenia bezpieczeństwa oraz zgodności z przepisami takimi jak RODO czy PCI DSS. W PostgreSQL do audytu operacji na danych służy rozszerzenie pgaudit, które pozwala rejestrować szczegółowe informacje o działaniach na poziomie zapytań i transakcji. PGAudit zapewnia narzędzia potrzebne do tworzenia logów audytowych wymaganych do przejścia określonych audytów rządowych, finansowych lub certyfikacji ISO.
+
+\sphinxAtStartPar
+Systemy takie jak ELK Stack czy Splunk umożliwiają centralizację i analizę logów oraz konfigurację alertów na podejrzane działania, co wzmacnia bezpieczeństwo środowiska bazodanowego. Automatyczne powiadomienia można skonfigurować dla zdarzeń takich jak próby logowania poza godzinami pracy lub masowe operacje na wrażliwych tabelach.
+
+
+\subsection{Monitorowanie Logów i Raportowanie Błędów}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:monitorowanie-logow-i-raportowanie-bledow}}
+
+\subsubsection{Analiza Logów Systemowych}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:analiza-logow-systemowych}}
+\sphinxAtStartPar
+PostgreSQL generuje szczegółowe logi systemowe i dzienniki błędów stanowiące podstawowe źródło informacji o stanie bazy danych. Dzienniki rejestrują wszelkie błędy, ostrzeżenia, nietypowe zdarzenia oraz informacje o operacjach wykonywanych przez użytkowników i aplikacje, obejmując kody błędów, czas wystąpienia problemu, tekst zapytania SQL oraz szczegóły środowiska wykonania.
+
+\sphinxAtStartPar
+Regularna analiza logów pozwala administratorom na szybkie wykrywanie i rozwiązywanie problemów przed ich wpływem na użytkowników końcowych. Do analizy wykorzystuje się narzędzia takie jak ELK Stack (Elasticsearch, Logstash, Kibana), Splunk, pgBadger czy wbudowane funkcje PostgreSQL. pgBadger stanowi szczególnie efektywne narzędzie \sphinxhyphen{} jest to szybki analizator logów PostgreSQL napisany w Perl, który przetwarza dane wyjściowe logów na raporty HTML z szczegółowymi informacjami o wydajności.
+
+
+\subsubsection{Automatyczne Raportowanie i Alerty}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:automatyczne-raportowanie-i-alerty}}
+\sphinxAtStartPar
+Automatyzacja raportowania i alertowania stanowi kluczowy element szybkiego reagowania na incydenty. Narzędzia takie jak pgAdmin, Zabbix, Prometheus czy Grafana umożliwiają konfigurację reguł automatycznego generowania raportów oraz wysyłania powiadomień przy wykryciu określonych zdarzeń.
+
+\sphinxAtStartPar
+Skuteczne alertowanie wymaga ostrożnego ustawiania progów i właściwej priorytetyzacji. Alerty o wysokim priorytecie obejmują opóźnienia replikacji przekraczające 2 minuty, liczę połączeń przekraczającą 85\% max\_connections oraz współczynnik trafień cache’u spadający poniżej 98\% dla systemów produkcyjnych. Powiadomienia mogą być wysyłane poprzez e\sphinxhyphen{}mail, SMS, Slack lub inne kanały komunikacji.
+
+
+\subsubsection{Konfiguracja Logowania dla pgBadger}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:konfiguracja-logowania-dla-pgbadger}}
+\sphinxAtStartPar
+Aby efektywnie wykorzystać pgBadger, logowanie w PostgreSQL powinno być skonfigurowane w sposób zapewniający maksimum informacji. Podstawowe ustawienia konfiguracyjne w postgresql.conf obejmują: log\_checkpoints = on, log\_connections = on, log\_disconnections = on, log\_lock\_waits = on, log\_temp\_files = 0, log\_autovacuum\_min\_duration = 0.
+
+\sphinxAtStartPar
+Szczególnie wartościowe są raporty wolnych zapytań generowane przez pgBadger, które polegają na ustawieniu log\_min\_duration\_statement. pgBadger może przetwarzać logi PostgreSQL niezależnie od tego, czy są to syslog, stderr czy csvlog, o ile linie logów zawierają wystarczające informacje w prefiksie .
+
+
+\subsection{Monitorowanie na Poziomie Systemu Operacyjnego}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:monitorowanie-na-poziomie-systemu-operacyjnego}}
+
+\subsubsection{Narzędzia Systemowe}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:narzedzia-systemowe}}
+\sphinxAtStartPar
+Monitorowanie zasobów systemowych takich jak procesor, pamięć, dysk i sieć jest kluczowe dla zapewnienia stabilnej pracy PostgreSQL. W środowisku Linux administratorzy wykorzystują narzędzia takie jak top (wyświetlające listę procesów i zużycie zasobów w czasie rzeczywistym), htop (oferujące graficzne przedstawienie obciążenia), iostat (monitorujące statystyki wejścia/wyjścia) oraz vmstat (dostarczające informacji o pamięci i aktywności procesora).
+
+\sphinxAtStartPar
+W środowisku Windows popularne narzędzia obejmują Menedżer zadań umożliwiający monitorowanie użycia CPU, pamięci, dysku i sieci przez poszczególne procesy oraz Monitor systemu (Performance Monitor) \sphinxhyphen{} zaawansowane narzędzie do śledzenia wielu wskaźników wydajności. Te narzędzia umożliwiają szybkie wykrywanie i diagnozowanie problemów z wydajnością zarówno na poziomie systemu operacyjnego, jak i samej bazy danych.
+
+\sphinxAtStartPar
+Efektywne monitorowanie systemu wymaga śledzenia kluczowych metryk: wykorzystania CPU (wysokie użycie może ograniczać przetwarzanie zapytań), CPU steal time (szczególnie w środowiskach zwirtualizowanych), wykorzystania pamięci przez PostgreSQL oraz ogólnego obciążenia pamięci systemu. Krytyczne jest unikanie wykorzystania swap przez PostgreSQL, ponieważ drastycznie pogarsza to wydajność.
+
+
+\subsubsection{Integracja z Narzędziami Zewnętrznymi}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:integracja-z-narzedziami-zewnetrznymi}}
+\sphinxAtStartPar
+PostgreSQL doskonale integruje się z zaawansowanymi narzędziami monitorowania infrastruktury IT, umożliwiającymi centralizację nadzoru oraz automatyzację reakcji na incydenty. Nagios, popularny system monitorowania infrastruktury, pozwala na monitorowanie stanu serwerów, usług, zasobów sprzętowych oraz sieci z konfiguracją alertów powiadamiających o przekroczeniu progów wydajności.
+
+\sphinxAtStartPar
+Prometheus stanowi narzędzie do zbierania i przechowywania metryk współpracujące z wieloma eksporterami, w tym dedykowanymi dla PostgreSQL. OpenTelemetry Collector oferuje nowoczesne podejście, działając jako agent pobierający dane telemetryczne z systemów i eksportujący je do backendu OpenTelemetry. Grafana zapewnia zaawansowaną wizualizację danych, umożliwiając tworzenie interaktywnych dashboardów prezentujących kluczowe wskaźniki wydajności PostgreSQL.
+
+
+\subsection{Narzędzia Monitorowania PostgreSQL}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:narzedzia-monitorowania-postgresql}}
+
+\subsubsection{Narzędzia Open Source}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:narzedzia-open-source}}
+\sphinxAtStartPar
+Ekosystem narzędzi open source dla PostgreSQL jest bogaty i różnorodny. pgAdmin oferuje graficzny interfejs do administrowania bazami danych z funkcjami monitorowania aktywności serwera, wydajności zapytań oraz obiektów bazy danych. Dashboard serwera w pgAdmin dostarcza przegląd ważnych metryk, w tym wykorzystania CPU, pamięci, miejsca na dysku i aktywnych połączeń.
+
+\sphinxAtStartPar
+pgBadger stanowi jedną z najpopularniejszych opcji \sphinxhyphen{} to szybki analizator logów PostgreSQL zbudowany dla wydajności, który tworzy szczegółowe raporty w formacie HTML5 z dynamicznymi wykresami. Najnowsza wersja pgBadger 13.0 wprowadza nowe funkcje, w tym konfigurowalne histogramy czasów zapytań i sesji. Narzędzie jest idealne do zrozumienia zachowania serwerów PostgreSQL i identyfikacji zapytań wymagających optymalizacji.
+
+\sphinxAtStartPar
+PGWatch reprezentuje kolejne zaawansowane rozwiązanie \sphinxhyphen{} to elastyczne, samodzielne narzędzie do monitorowania metryk PostgreSQL oferujące instalację w jedną minutę przy użyciu Dockera. PGWatch charakteryzuje się nieinwazyjną konfiguracją, intuicyjną prezentacją metryk przy użyciu Grafany oraz łatwą rozszerzalnością poprzez definiowanie metryk w czystym SQL.
+
+
+\subsubsection{Rozwiązania Komercyjne}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:rozwiazania-komercyjne}}
+\sphinxAtStartPar
+DataDog APM zapewnia komercyjną platformę monitorowania i analizy ze specjalistyczną integracją PostgreSQL. Platforma oferuje łatwą w użyciu integrację PostgreSQL umożliwiającą zbieranie i monitorowanie metryk wydajności bez ręcznej instrumentacji. Agent DataDog automatycznie pobiera metryki PostgreSQL udostępniane przez serwer, obejmując połączenia z bazą danych, wydajność zapytań, statystyki puli buforów oraz status replikacji.
+
+\sphinxAtStartPar
+Sematext Monitoring skupia się na logach, infrastrukturze, śledzeniu i monitorowaniu wydajności nie tylko dla PostgreSQL, ale także dla wielu innych baz danych. Rozwiązanie oferuje łatwy w konfiguracji agent PostgreSQL oraz wbudowaną integrację logów PostgreSQL pozwalającą identyfikować wolne zapytania, błędy i ostrzeżenia.
+
+\sphinxAtStartPar
+pganalyze stanowi wyspecjalizowane narzędzie monitorowania PostgreSQL umożliwiające optymalizację i analizę zapytań, łatwe monitorowanie bieżących zapytań w czasie rzeczywistym oraz zbieranie planów zapytań. Dzięki kompleksowym danym o wydajności zapytań pganalyze pozwala szybko identyfikować przyczyny problemów i sprawdzać skuteczność wdrożonych rozwiązań.
+
+
+\subsubsection{Zabbix dla PostgreSQL}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:zabbix-dla-postgresql}}
+\sphinxAtStartPar
+Zabbix stanowi open\sphinxhyphen{}source’owe rozwiązanie monitorowania obsługujące PostgreSQL poprzez wbudowane szablony i niestandardowe skrypty. System opiera się na agentach instalowanych na systemach docelowych \sphinxhyphen{} w przypadku PostgreSQL wymaga konfiguracji agenta Zabbix na serwerze PostgreSQL.
+
+\sphinxAtStartPar
+Implementacja Zabbix dla PostgreSQL wymaga stworzenia użytkownika monitorowania z odpowiednimi prawami dostępu. Dla PostgreSQL w wersji 10 i wyższej: “CREATE USER zbx\_monitor WITH PASSWORD ‘\textless{}PASSWORD\textgreater{}’ INHERIT; GRANT pg\_monitor TO zbx\_monitor;”. Po zaimportowaniu szablonu PostgreSQL Zabbix automatycznie zbiera metryki takie jak liczba połączeń, wskaźniki transakcji, wydajność zapytań i inne.
+
+
+\subsection{Najlepsze Praktyki Monitorowania}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:najlepsze-praktyki-monitorowania}}
+
+\subsubsection{Ustanawianie Baselines Wydajności}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:ustanawianie-baselines-wydajnosci}}
+\sphinxAtStartPar
+Tworzenie baselines wydajności stanowi fundament skutecznego wykrywania anomalii. Bez zrozumienia normalnych wzorców zachowania identyfikacja problematycznych odchyleń staje się zgadywaniem zamiast analizy opartej na danych. Kompleksowe ustalanie baselines wymaga zbierania metryk w różnych ramach czasowych i wzorcach obciążenia, obejmując dzienne wzorce (szczczyty w godzinach biznesowych i nocne przetwarzanie), tygodniowe różnice oraz miesięczne i sezonowe wariacje.
+
+\sphinxAtStartPar
+Dla każdego wzorca należy dokumentować wskaźniki przepustowości zapytań, poziomy wykorzystania zasobów, zakresy liczby połączeń, wskaźniki transakcji oraz rozkłady zdarzeń oczekiwania. Zaleca się zbieranie co najmniej trzech cykli każdego typu wzorca przed ustaleniem wartości progowych.
+
+
+\subsubsection{Korelacja Metryk Międzysystemowych}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:korelacja-metryk-miedzysystemowych}}
+\sphinxAtStartPar
+Problemy wydajności PostgreSQL rzadko występują w izolacji. Najbardziej wartościowe implementacje monitorowania korelują metryki z różnych podsystemów w celu ujawnienia związków przyczynowo\sphinxhyphen{}skutkowych. Efektywne strategie korelacji obejmują łączenie metryk wykonania zapytań z metrykami zasobów systemowych, korelację zdarzeń wdrożeniowych aplikacji z metrykami wydajności bazy danych oraz analizę metryk przy użyciu spójnych okien czasowych.
+
+\sphinxAtStartPar
+Implementacja zwykle wymaga ujednoliconego oznaczania czasowego w systemach monitorowania, spójnego tagowania metadanych dla usług i komponentów oraz scentralizowanego logowania zdarzeń systemowych. Narzędzia wizualizacji powinny obsługiwać nakładanie różnych typów metryk w celu efektywnej analizy.
+
+
+\subsubsection{Konfiguracja Efektywnych Alertów}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:konfiguracja-efektywnych-alertow}}
+\sphinxAtStartPar
+Strategie alertowania wymagają starannego ustawiania progów i właściwej priorytetyzacji. Alerty o wysokim priorytecie wymagające natychmiastowej akcji obejmują opóźnienia replikacji przekraczające 2 minuty, liczę połączeń przekraczającą 85\% max\_connections, wskaźniki wycofywania transakcji powyżej 10\% utrzymujące się przez 5+ minut oraz przestrzeń dyskową poniżej 15\% na wolumenach bazy danych.
+
+\sphinxAtStartPar
+Alerty o średnim priorytecie wymagające badania obejmują czasy zapytań przekraczające 200\% historycznych baselines, nietypowy wzrost użycia plików tymczasowych, rozdęcie tabel przekraczające 30\% rozmiaru tabeli oraz brak działania autovacuum przez 24+ godziny. Implementacja wielopoziomowego alertowania z progami ostrzeżeń na poziomie 70\sphinxhyphen{}80\% wartości krytycznych zapewnia wczesne powiadomienie o rozwijających się problemach.
+
+
+\subsection{Monitorowanie Wysokiej Dostępności}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:monitorowanie-wysokiej-dostepnosci}}
+
+\subsubsection{Monitorowanie Statusu Replikacji}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:monitorowanie-statusu-replikacji}}
+\sphinxAtStartPar
+Monitorowanie klastrów PostgreSQL o wysokiej dostępności wymaga dodatkowych wymiarów poza monitorowaniem pojedynczej instancji. Kluczowe obszary obejmują śledzenie opóźnienia replikacji w jednostkach bajtów i czasu, monitorowanie wskaźnika generowania WAL na głównej instancji w porównaniu do wskaźnika odtwarzania na replikach oraz sprawdzanie akumulacji slotów replikacji, które mogą powodować zapełnienie dysku.
+
+\sphinxAtStartPar
+Zapytanie monitorujące opóźnienie replikacji: “SELECT application\_name, pg\_wal\_lsn\_diff(pg\_current\_wal\_lsn(), replay\_lsn) AS lag\_bytes FROM pg\_stat\_replication;” pozwala na wykrywanie rosnącego opóźnienia wskazującego, że repliki nie nadążają za instancją główną. Regularne testowanie możliwości promocji repliki oraz monitorowanie mechanizmów automatycznego failover jest kluczowe dla gotowości na awarię.
+
+
+\subsubsection{Weryfikacja Spójności}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:weryfikacja-spojnosci}}
+\sphinxAtStartPar
+Implementacja niezależnego monitorowania każdego węzła klastra z osobną instancją monitorowania poza klastrem bazy danych zapewnia widoczność podczas problemów z całym klastrem. Okresowe sprawdzenie spójności danych między instancją główną a replikami, monitorowanie konfliktów replikacji w konfiguracjach replikacji logicznej oraz śledzenie sum kontrolnych tabel są kluczowe dla utrzymania integralności danych.
+
+\sphinxAtStartPar
+Monitorowanie rozkładu połączeń obejmuje śledzenie liczby połączeń na głównej instancji i replikach odczytu, monitorowanie konfiguracji load balancera oraz weryfikację możliwości failover w connection stringach aplikacji. Sprawdzanie nieodpowiednich zapisów kierowanych do replik pomaga uniknąć błędów aplikacyjnych podczas przełączeń.
+
+
+\subsection{Wniosek}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:wniosek}}
+\sphinxAtStartPar
+Monitorowanie i diagnostyka PostgreSQL stanowią kompleksowy proces wymagający holistycznego podejścia obejmującego multiple warstwy systemu. Skuteczna implementacja łączy monitorowanie na poziomie bazy danych, systemu operacyjnego oraz aplikacji, wykorzystując zarówno narzędzia wbudowane w PostgreSQL, jak i zewnętrzne rozwiązania specjalistyczne. Kluczem do sukcesu jest ustanowienie solidnych baseline’ów wydajności, implementacja inteligentnego systemu alertów oraz regularna analiza trendów umożliwiająca proaktywne zarządzanie zasobami i optymalizację wydajności przed wystąpieniem problemów krytycznych.
+
+
+\subsection{Bibliografia:}
+\label{\detokenize{rozdzial2/Monitorowanie-i-diagnostyka/index:bibliografia}}\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://betterstack.com/community/comparisons/postgresql-monitoring-tools/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://uptrace.dev/tools/postgresql-monitoring-tools}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://documentation.red-gate.com/pgnow}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://last9.io/blog/monitoring-postgres/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://stackoverflow.com/questions/17654033/how-to-use-pg-stat-activity}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://pganalyze.com/blog/postgres-lock-monitoring}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.pgaudit.org}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.postgresql.org/docs/current/pgstatstatements.html}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://github.com/darold/pgbadger}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://hevodata.com/learn/elasticsearch-to-postgresql/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.zabbix.com/integrations/postgresql}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://sematext.com/blog/postgresql-monitoring/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.alibabacloud.com/help/en/analyticdb/analyticdb-for-postgresql/use-cases/use-pg-stat-activity-to-analyze-and-diagnose-active-sql-queries}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://wiki.postgresql.org/wiki/Lock\_Monitoring}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://severalnines.com/blog/postgresql-log-analysis-pgbadger/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://pgwatch.com}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.depesz.com/2022/07/05/understanding-pg\_stat\_activity/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.postgresql.org/about/news/pgbadger-v124-released-2772/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://docs.yugabyte.com/preview/explore/observability/pg-stat-activity/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.postgresql.org/about/news/pgbadger-130-released-2975/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-greenplum/6/greenplum-database/ref\_guide-system\_catalogs-pg\_stat\_activity.html}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.postgresql.org/docs/current/monitoring.html}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.reddit.com/r/PostgreSQL/comments/1auy79s/suggestions\_for\_postgresql\_monitoring\_tool/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://wiki.postgresql.org/wiki/Monitoring}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.site24x7.com/learn/postgres-monitoring-guide.html}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.softwareandbooz.com/introducing-pgnow/}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://www.postgresql.org/docs/current/monitoring-stats.html}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://docs.dhis2.org/fr/topics/tutorials/analysing-postgresql-logs-using-pgbadger.html}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://dev.to/full\_stack\_adi/pgbadger-postgresql-log-analysis-made-easy-54ki}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://support.nagios.com/kb/article/xi-5-10-0-and-newer-postgress-to-mysql-conversion-560.html}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://github.com/melli0505/Docker-ELK-PostgreSQL}
+
+\end{enumerate}
+
+\sphinxstepscope
+
+
+\section{Kopie zapasowe i odzyskiwanie danych w PostgreSQL}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:kopie-zapasowe-i-odzyskiwanie-danych-w-postgresql}}\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych::doc}}\begin{quote}\begin{description}
+\sphinxlineitem{Autorzy}
+\sphinxAtStartPar
+Miłosz Śmieja Szymon Piskorz Mateusz Wasilewicz
+
+\end{description}\end{quote}
+
+
+\subsection{Wprowadzenie}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:wprowadzenie}}
+\sphinxAtStartPar
+System zarządzania bazą danych PostgreSQL oferuje kompleksowy zestaw narzędzi i mechanizmów służących do tworzenia kopii zapasowych oraz odzyskiwania danych. Skuteczne zarządzanie kopiami zapasowymi stanowi fundament bezpieczeństwa danych i ciągłości działania systemów bazodanowych.
+
+\sphinxAtStartPar
+PostgreSQL dostarcza zarówno mechanizmy wbudowane, jak i możliwość integracji z zewnętrznymi narzędziami automatyzacji.
+
+
+\subsection{Mechanizmy wbudowane do tworzenia kopii zapasowych całego systemu PostgreSQL}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:mechanizmy-wbudowane-do-tworzenia-kopii-zapasowych-calego-systemu-postgresql}}
+\sphinxAtStartPar
+PostgreSQL oferuje kilka mechanizmów tworzenia kopii zapasowych na poziomie całego systemu, które zapewniają kompleksową ochronę wszystkich baz danych w klastrze.
+
+
+\subsubsection{pg\_basebackup}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:pg-basebackup}}
+\sphinxAtStartPar
+\sphinxstylestrong{pg\_basebackup} stanowi podstawowe narzędzie do tworzenia fizycznych kopii zapasowych całego klastra PostgreSQL.
+
+\sphinxAtStartPar
+Kluczowe cechy:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Działa w trybie online \sphinxhyphen{} możliwość wykonywania kopii zapasowych bez zatrzymywania działania serwera
+
+\item {} 
+\sphinxAtStartPar
+Tworzy dokładną kopię wszystkich plików danych
+
+\item {} 
+\sphinxAtStartPar
+Zawiera pliki konfiguracyjne, dzienniki transakcji oraz wszystkie bazy danych w klastrze
+
+\end{itemize}
+
+
+\subsubsection{Continuous Archiving (Point\sphinxhyphen{}in\sphinxhyphen{}Time Recovery)}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:continuous-archiving-point-in-time-recovery}}
+\sphinxAtStartPar
+\sphinxstylestrong{Continuous Archiving} reprezentuje zaawansowany mechanizm tworzenia ciągłych kopii zapasowych poprzez archiwizację dzienników WAL (Write\sphinxhyphen{}Ahead Logging).
+
+\sphinxAtStartPar
+Zalety:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Umożliwia odtworzenie stanu bazy danych w dowolnym momencie czasowym
+
+\item {} 
+\sphinxAtStartPar
+Szczególnie wartościowe w środowiskach produkcyjnych wymagających minimalnej utraty danych
+
+\item {} 
+\sphinxAtStartPar
+Zapewnia wysoką granularność odzyskiwania danych
+
+\end{itemize}
+
+
+\subsubsection{Streaming Replication}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:streaming-replication}}
+\sphinxAtStartPar
+\sphinxstylestrong{Streaming Replication} może służyć jako mechanizm kopii zapasowych poprzez utrzymywanie synchronicznych lub asynchronicznych replik głównej bazy danych.
+
+\sphinxAtStartPar
+Funkcjonalności:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Repliki funkcjonują jako kopie zapasowe w czasie rzeczywistym
+
+\item {} 
+\sphinxAtStartPar
+Oferuje możliwość szybkiego przełączenia w przypadku awarii systemu głównego
+
+\item {} 
+\sphinxAtStartPar
+Wspiera zarówno tryb synchroniczny, jak i asynchroniczny
+
+\end{itemize}
+
+
+\subsubsection{File System Level Backup}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:file-system-level-backup}}
+\sphinxAtStartPar
+\sphinxstylestrong{File System Level Backup} polega na tworzeniu kopii zapasowych na poziomie systemu plików.
+
+\sphinxAtStartPar
+Wymagania:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Zatrzymanie serwera PostgreSQL lub zapewnienie spójności
+
+\item {} 
+\sphinxAtStartPar
+Wykorzystanie mechanizmów snapshot systemu plików:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+LVM snapshots
+
+\item {} 
+\sphinxAtStartPar
+ZFS snapshots
+
+\end{itemize}
+
+\end{itemize}
+
+
+\subsection{Mechanizmy wbudowane do tworzenia kopii zapasowych poszczególnych baz danych}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:mechanizmy-wbudowane-do-tworzenia-kopii-zapasowych-poszczegolnych-baz-danych}}
+\sphinxAtStartPar
+PostgreSQL dostarcza precyzyjne narzędzia umożliwiające tworzenie kopii zapasowych pojedynczych baz danych lub ich wybranych elementów.
+
+
+\subsubsection{pg\_dump}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:pg-dump}}
+\sphinxAtStartPar
+\sphinxstylestrong{pg\_dump} stanowi najczęściej wykorzystywane narzędzie do tworzenia logicznych kopii zapasowych pojedynczych baz danych.
+
+\sphinxAtStartPar
+Charakterystyka:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Tworzy skrypt SQL zawierający wszystkie polecenia niezbędne do odtworzenia struktury bazy danych oraz jej danych
+
+\item {} 
+\sphinxAtStartPar
+Oferuje liczne opcje konfiguracji:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Możliwość wyboru formatu wyjściowego
+
+\item {} 
+\sphinxAtStartPar
+Filtrowanie obiektów
+
+\item {} 
+\sphinxAtStartPar
+Kontrola nad poziomem szczegółowości kopii zapasowej
+
+\end{itemize}
+
+\end{itemize}
+
+
+\subsubsection{pg\_dumpall}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:pg-dumpall}}
+\sphinxAtStartPar
+\sphinxstylestrong{pg\_dumpall} rozszerza funkcjonalność \sphinxcode{\sphinxupquote{pg\_dump}} o możliwość tworzenia kopii zapasowych wszystkich baz danych w klastrze.
+
+\sphinxAtStartPar
+Dodatkowe funkcje:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Backup obiektów globalnych:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Role użytkowników
+
+\item {} 
+\sphinxAtStartPar
+Tablespaces
+
+\item {} 
+\sphinxAtStartPar
+Ustawienia konfiguracyjne na poziomie klastra
+
+\end{itemize}
+
+\end{itemize}
+
+
+\subsubsection{COPY command}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:copy-command}}
+\sphinxAtStartPar
+\sphinxstylestrong{COPY command} umożliwia eksport danych z poszczególnych tabel do plików w różnych formatach.
+
+\sphinxAtStartPar
+Obsługiwane formaty:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+CSV
+
+\item {} 
+\sphinxAtStartPar
+Text
+
+\item {} 
+\sphinxAtStartPar
+Binary
+
+\end{itemize}
+
+\sphinxAtStartPar
+Zastosowania:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Tworzenie selektywnych kopii zapasowych dużych tabel
+
+\item {} 
+\sphinxAtStartPar
+Migracje danych
+
+\end{itemize}
+
+
+\subsubsection{pg\_dump z opcjami selektywnymi}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:pg-dump-z-opcjami-selektywnymi}}
+\sphinxAtStartPar
+\sphinxstylestrong{pg\_dump z opcjami selektywnymi} pozwala na tworzenie kopii zapasowych wybranych obiektów bazy danych.
+
+\sphinxAtStartPar
+Możliwości filtrowania:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Konkretne tabele
+
+\item {} 
+\sphinxAtStartPar
+Schematy
+
+\item {} 
+\sphinxAtStartPar
+Sekwencje
+
+\end{itemize}
+
+\sphinxAtStartPar
+Funkcjonalność ta jest nieoceniona w scenariuszach wymagających granularnej kontroli nad procesem tworzenia kopii zapasowych.
+
+
+\subsection{Odzyskiwanie usuniętych lub uszkodzonych danych}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:odzyskiwanie-usunietych-lub-uszkodzonych-danych}}
+\sphinxAtStartPar
+PostgreSQL oferuje różnorodne mechanizmy odzyskiwania danych w zależności od rodzaju i zakresu uszkodzeń.
+
+
+\subsubsection{Odzyskiwanie z kopii logicznych}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:odzyskiwanie-z-kopii-logicznych}}
+\sphinxAtStartPar
+\sphinxstylestrong{Odzyskiwanie z kopii logicznych} wykonanych przy użyciu \sphinxcode{\sphinxupquote{pg\_dump}} realizowane jest poprzez \sphinxcode{\sphinxupquote{psql}} lub \sphinxcode{\sphinxupquote{pg\_restore}}.
+
+\sphinxAtStartPar
+Proces odzyskiwania:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Wykonanie skryptów SQL
+
+\item {} 
+\sphinxAtStartPar
+Przywrócenie plików dump w odpowiednim formacie
+
+\end{itemize}
+
+\sphinxAtStartPar
+Zaawansowane opcje pg\_restore:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Selektywne przywracanie obiektów
+
+\item {} 
+\sphinxAtStartPar
+Równoległe przetwarzanie
+
+\item {} 
+\sphinxAtStartPar
+Kontrola nad kolejnością przywracania
+
+\end{itemize}
+
+
+\subsubsection{Point\sphinxhyphen{}in\sphinxhyphen{}Time Recovery (PITR)}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:point-in-time-recovery-pitr}}
+\sphinxAtStartPar
+\sphinxstylestrong{Point\sphinxhyphen{}in\sphinxhyphen{}Time Recovery (PITR)} umożliwia przywrócenie bazy danych do konkretnego momentu w czasie.
+
+\sphinxAtStartPar
+Wykorzystywane komponenty:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Kombinacja kopii bazowej
+
+\item {} 
+\sphinxAtStartPar
+Archiwalne dzienniki WAL
+
+\end{itemize}
+
+\sphinxAtStartPar
+Zastosowania:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Cofnięcie zmian do momentu poprzedzającego wystąpienie błędu
+
+\item {} 
+\sphinxAtStartPar
+Odzyskiwanie po uszkodzeniu danych
+
+\end{itemize}
+
+\begin{sphinxadmonition}{note}{Note:}
+\sphinxAtStartPar
+PITR jest szczególnie wartościowy w przypadkach, gdy konieczne jest cofnięcie zmian do momentu poprzedzającego wystąpienie błędu lub uszkodzenia.
+\end{sphinxadmonition}
+
+
+\subsubsection{Odzyskiwanie tabel z tablespaces}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:odzyskiwanie-tabel-z-tablespaces}}
+\sphinxAtStartPar
+\sphinxstylestrong{Odzyskiwanie tabel z tablespaces} może wymagać specjalnych procedur w przypadku uszkodzenia przestrzeni tabel.
+
+\sphinxAtStartPar
+Możliwości PostgreSQL:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Odtworzenie tablespaces
+
+\item {} 
+\sphinxAtStartPar
+Przeniesienie tabel między różnymi lokalizacjami
+
+\item {} 
+\sphinxAtStartPar
+Odzyskiwanie danych nawet w przypadku częściowego uszkodzenia systemu plików
+
+\end{itemize}
+
+
+\subsubsection{Transaction log replay}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:transaction-log-replay}}
+\sphinxAtStartPar
+\sphinxstylestrong{Transaction log replay} wykorzystuje dzienniki WAL do odtworzenia zmian wprowadzonych po utworzeniu kopii zapasowej.
+
+\sphinxAtStartPar
+Charakterystyka:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Automatycznie wykorzystywany podczas standardowych procedur odzyskiwania
+
+\item {} 
+\sphinxAtStartPar
+Możliwość ręcznej kontroli w szczególnych sytuacjach
+
+\end{itemize}
+
+
+\subsubsection{Odzyskiwanie na poziomie klastra}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:odzyskiwanie-na-poziomie-klastra}}
+\sphinxAtStartPar
+\sphinxstylestrong{Odzyskiwanie na poziomie klastra} przy wykorzystaniu \sphinxcode{\sphinxupquote{pg\_basebackup}} wymaga przywrócenia wszystkich plików klastra oraz odpowiedniej konfiguracji parametrów recovery.
+
+\sphinxAtStartPar
+Zakres procesu:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Odtworzenie całego środowiska PostgreSQL
+
+\item {} 
+\sphinxAtStartPar
+Konfiguracja ról i uprawnień
+
+\item {} 
+\sphinxAtStartPar
+Przywrócenie ustawień systemowych
+
+\end{itemize}
+
+
+\subsection{Dedykowane oprogramowanie i skrypty zewnętrzne do automatyzacji}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:dedykowane-oprogramowanie-i-skrypty-zewnetrzne-do-automatyzacji}}
+\sphinxAtStartPar
+Automatyzacja procesów tworzenia kopii zapasowych stanowi kluczowy element profesjonalnego zarządzania bazami danych PostgreSQL.
+
+
+\subsubsection{pgBackRest}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:pgbackrest}}
+\sphinxAtStartPar
+\sphinxstylestrong{pgBackRest} reprezentuje kompleksowe rozwiązanie do zarządzania kopiami zapasowymi PostgreSQL.
+
+\sphinxAtStartPar
+Zaawansowane funkcje:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Incremental i differential backups
+
+\item {} 
+\sphinxAtStartPar
+Kompresja danych
+
+\item {} 
+\sphinxAtStartPar
+Szyfrowanie
+
+\item {} 
+\sphinxAtStartPar
+Weryfikacja integralności kopii
+
+\item {} 
+\sphinxAtStartPar
+Możliwość przechowywania kopii w chmurze
+
+\item {} 
+\sphinxAtStartPar
+Automatyzacja procesów zarządzania kopiami zapasowymi
+
+\item {} 
+\sphinxAtStartPar
+Uproszczone procedury odzyskiwania
+
+\end{itemize}
+
+\begin{sphinxadmonition}{important}{Important:}
+\sphinxAtStartPar
+pgBackRest automatyzuje wiele procesów związanych z zarządzaniem kopiami zapasowymi i znacznie upraszcza procedury odzyskiwania.
+\end{sphinxadmonition}
+
+
+\subsubsection{Barman (Backup and Recovery Manager)}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:barman-backup-and-recovery-manager}}
+\sphinxAtStartPar
+\sphinxstylestrong{Barman} stanowi dedykowane narzędzie stworzone przez 2ndQuadrant do zarządzania kopiami zapasowymi PostgreSQL w środowiskach enterprise.
+
+\sphinxAtStartPar
+Kluczowe funkcjonalności:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Centralne zarządzanie kopiami zapasowymi wielu serwerów PostgreSQL
+
+\item {} 
+\sphinxAtStartPar
+Monitoring procesów backup
+
+\item {} 
+\sphinxAtStartPar
+Automatyczne testowanie procedur recovery
+
+\item {} 
+\sphinxAtStartPar
+Integracja z narzędziami monitorowania
+
+\end{itemize}
+
+
+\subsubsection{WAL\sphinxhyphen{}E i WAL\sphinxhyphen{}G}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:wal-e-i-wal-g}}
+\sphinxAtStartPar
+\sphinxstylestrong{WAL\sphinxhyphen{}E i WAL\sphinxhyphen{}G} specjalizują się w archiwizacji dzienników WAL w środowiskach chmurowych.
+
+\sphinxAtStartPar
+Oferowane funkcje:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Efektywna kompresja
+
+\item {} 
+\sphinxAtStartPar
+Szyfrowanie danych
+
+\item {} 
+\sphinxAtStartPar
+Przechowywanie kopii zapasowych w serwisach chmurowych:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Amazon S3
+
+\item {} 
+\sphinxAtStartPar
+Google Cloud Storage
+
+\item {} 
+\sphinxAtStartPar
+Azure Blob Storage
+
+\end{itemize}
+
+\end{itemize}
+
+
+\subsubsection{Skrypty shell i cron jobs}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:skrypty-shell-i-cron-jobs}}
+\sphinxAtStartPar
+\sphinxstylestrong{Skrypty shell i cron jobs} stanowią tradycyjne podejście do automatyzacji kopii zapasowych.
+
+\sphinxAtStartPar
+Możliwości automatyzacji:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Wykonywanie \sphinxcode{\sphinxupquote{pg\_dump}} i \sphinxcode{\sphinxupquote{pg\_basebackup}}
+
+\item {} 
+\sphinxAtStartPar
+Zarządzanie cyklem życia kopii zapasowych
+
+\item {} 
+\sphinxAtStartPar
+Rotacja i czyszczenie starych kopii
+
+\end{itemize}
+
+\begin{sphinxadmonition}{tip}{Tip:}
+\sphinxAtStartPar
+Właściwie napisane skrypty mogą automatyzować wykonywanie pg\_dump, pg\_basebackup oraz zarządzanie cyklem życia kopii zapasowych, w tym rotację i czyszczenie starych kopii.
+\end{sphinxadmonition}
+
+
+\subsubsection{Narzędzia automatyzacji infrastruktury}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:narzedzia-automatyzacji-infrastruktury}}
+\sphinxAtStartPar
+\sphinxstylestrong{Ansible, Puppet, Chef} jako narzędzia automatyzacji infrastruktury mogą być wykorzystywane do zarządzania konfiguracją procesów backup na większą skalę.
+
+\sphinxAtStartPar
+Korzyści:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Standaryzacja procedur backup w środowiskach wieloserwerowych
+
+\item {} 
+\sphinxAtStartPar
+Zapewnienie konsystentności konfiguracji
+
+\item {} 
+\sphinxAtStartPar
+Skalowalne zarządzanie infrastrukturą
+
+\end{itemize}
+
+
+\subsubsection{Monitoring i alertowanie}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:monitoring-i-alertowanie}}
+\sphinxAtStartPar
+\sphinxstylestrong{Prometheus i Grafana} w połączeniu z \sphinxcode{\sphinxupquote{postgres\_exporter}} umożliwiają monitoring procesów backup oraz alertowanie w przypadku niepowodzeń.
+
+\sphinxAtStartPar
+Zakres monitorowania:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Śledzenie czasu wykonywania kopii
+
+\item {} 
+\sphinxAtStartPar
+Monitorowanie rozmiaru kopii zapasowych
+
+\item {} 
+\sphinxAtStartPar
+Wskaźnik sukcesu procesów backup
+
+\item {} 
+\sphinxAtStartPar
+Alertowanie w czasie rzeczywistym
+
+\end{itemize}
+
+
+\subsection{Podsumowanie}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:podsumowanie}}
+\sphinxAtStartPar
+Skuteczne zarządzanie kopiami zapasowymi w PostgreSQL wymaga kombinacji mechanizmów wbudowanych oraz zewnętrznych narzędzi automatyzacji. Wybór odpowiedniej strategii backup zależy od specyficznych wymagań organizacji, w tym:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{RTO (Recovery Time Objective)} \sphinxhyphen{} maksymalny akceptowalny czas odzyskiwania
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{RPO (Recovery Point Objective)} \sphinxhyphen{} maksymalna akceptowalna utrata danych
+
+\item {} 
+\sphinxAtStartPar
+Dostępne zasoby
+
+\item {} 
+\sphinxAtStartPar
+Złożoność środowiska
+
+\end{itemize}
+
+
+\subsubsection{Kluczowe wnioski}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:kluczowe-wnioski}}
+\sphinxAtStartPar
+\sphinxstylestrong{Mechanizmy wbudowane} PostgreSQL, takie jak \sphinxcode{\sphinxupquote{pg\_dump}}, \sphinxcode{\sphinxupquote{pg\_basebackup}} czy PITR, oferują solidne podstawy dla większości scenariuszy backup i recovery.
+
+\sphinxAtStartPar
+\sphinxstylestrong{W środowiskach produkcyjnych} o wysokich wymaganiach dotyczących dostępności i niezawodności, integracja z dedykowanymi narzędziami takimi jak pgBackRest czy Barman staje się niezbędna.
+
+
+\subsubsection{Najważniejsze zalecenia}
+\label{\detokenize{rozdzial2/Kopie_zapasowe_i_odzyskiwanie_danych/kopie_zapasowe_i_odzyskiwanie_danych:najwazniejsze-zalecenia}}
+\begin{sphinxadmonition}{warning}{Warning:}
+\sphinxAtStartPar
+Kluczowym elementem każdej strategii backup jest regularne testowanie procedur odzyskiwania danych. Kopie zapasowe mają wartość tylko wtedy, gdy można z nich skutecznie odzyskać dane w sytuacji kryzysowej.
+\end{sphinxadmonition}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Kompleksowa strategia backup} powinna obejmować:
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Tworzenie kopii zapasowych
+
+\item {} 
+\sphinxAtStartPar
+Regularne testy restore
+
+\item {} 
+\sphinxAtStartPar
+Dokumentację procedur
+
+\item {} 
+\sphinxAtStartPar
+Szkolenie personelu odpowiedzialnego za zarządzanie bazami danych
+
+\end{enumerate}
+
+\sphinxstepscope
+
+
+\section{Kontrola i konserwacja baz danych}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:kontrola-i-konserwacja-baz-danych}}\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja::doc}}
+
+\subsection{Wprowadzenie}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:wprowadzenie}}
+\sphinxAtStartPar
+Autor: Bartłomiej Czyż
+
+\sphinxAtStartPar
+Systemy baz danych są niezwykle ważnym elementem infrastruktury informatycznej współczesnych organizacji. Umożliwiają przechowywanie, zarządzanie i analizę danych w sposób bezpieczny oraz wydajny. Aby zapewnić ich niezawodność, integralność i wysoką dostępność, konieczne jest prowadzenie regularnych działań z zakresu kontroli i konserwacji. Działania te można podzielić na część fizyczną oraz część programową, a sposób ich przeprowadzania różni się w zależności od rodzaju i architektury używanej bazy danych.
+
+
+\subsection{Podział konserwacji baz danych}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:podzial-konserwacji-baz-danych}}
+\sphinxAtStartPar
+Autor: Bartłomiej Czyż
+
+
+\subsubsection{Konserwacja fizyczna}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:konserwacja-fizyczna}}
+\sphinxAtStartPar
+Konserwacja fizyczna obejmuje wszystkie działania związane z infrastrukturą sprzętową i zasobami systemowymi, na których działa baza danych. Do najważniejszych elementów tej konserwacji należą:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Monitorowanie stanu dysków twardych \textendash{} pozostała przestrzeń na dyskach, zużycie dysków oraz fragmentacja danych,
+
+\item {} 
+\sphinxAtStartPar
+Zabezpieczenie fizyczne serwerów \textendash{} kontrola dostępu, ochrona przeciwpożarowa, klimatyzacja,
+
+\item {} 
+\sphinxAtStartPar
+Zasilanie awaryjne (UPS) \sphinxhyphen{} zabezpieczenie bazy przed skutkami nagłego zaniku zasilania,
+
+\item {} 
+\sphinxAtStartPar
+Monitoring stanu sieci \textendash{} wydajność i stabilność połączenia między bazą a klientami,
+
+\item {} 
+\sphinxAtStartPar
+Tworzenie kopii zapasowych na nośnikach fizycznych \textendash{} np. dyskach zewnętrznych czy taśmach LTO.
+
+\end{itemize}
+
+
+\subsubsection{Konserwacja programowa}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:konserwacja-programowa}}
+\sphinxAtStartPar
+Konserwacja programowa odnosi się do czynności wykonywanych na poziomie oprogramowania i logiki działania systemu bazy danych. Obejmuje:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Zarządzanie użytkownikami i ich uprawnieniami,
+
+\item {} 
+\sphinxAtStartPar
+Optymalizację zapytań SQL,
+
+\item {} 
+\sphinxAtStartPar
+Aktualizację oprogramowania bazodanowego (np. MySQL, PostgreSQL),
+
+\item {} 
+\sphinxAtStartPar
+Defragmentację indeksów,
+
+\item {} 
+\sphinxAtStartPar
+Weryfikację integralności danych i naprawę uszkodzonych rekordów,
+
+\item {} 
+\sphinxAtStartPar
+Automatyczne zadania konserwacyjne (cron, schedulery),
+
+\item {} 
+\sphinxAtStartPar
+Reduplikację i redundancję \sphinxhyphen{} konfiguracja serwerów zapasowych.
+
+\end{itemize}
+
+
+\subsection{Różnice konserwacyjne w zależności od rodzaju bazy danych}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:roznice-konserwacyjne-w-zaleznosci-od-rodzaju-bazy-danych}}
+\sphinxAtStartPar
+Autor: Bartłomiej Czyż
+
+
+\subsubsection{PostgreSQL}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:postgresql}}
+\sphinxAtStartPar
+PostgreSQL to zaawansowany system RDBMS, znany z silnego wsparcia dla różnych typów danych i transakcyjności.
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Fizyczna konserwacja:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Złożona struktura katalogów danych (base, pg\_wal, pg\_tblspc) \textendash{} wymaga regularnego monitoringu,
+
+\item {} 
+\sphinxAtStartPar
+Możliwość wykorzystania narzędzia pg\_basebackup do tworzenia pełnych kopii fizycznych.
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+Programowa konserwacja:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Automatyczne zadania VACUUM, ANALYZE \textendash{} zapewniają odzyskiwanie przestrzeni po usunięciu rekordów,
+
+\item {} 
+\sphinxAtStartPar
+Możliwość używania pg\_repack do defragmentacji bez przestojów,
+
+\item {} 
+\sphinxAtStartPar
+Silne wsparcie dla replikacji strumieniowej i klastrów wysokiej dostępności (HA).
+
+\end{itemize}
+
+\end{enumerate}
+
+
+\subsubsection{MySQL}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:mysql}}
+\sphinxAtStartPar
+MySQL jest obecnie jedną z najpopularniejszych relacyjnych baz danych, szeroko stosowana w aplikacjach webowych.
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Fizyczna konserwacja:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Wymaga monitorowania plików .ibd (w przypadku silknika InnoDB), które mogą znacznie rosnąć,
+
+\item {} 
+\sphinxAtStartPar
+Backup danych realizowany poprzez mysqldump lub system replikacji binlogów.
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+Programowa konserwacja:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Regularne sprawdzanie indeksów (ANALYZE TABLE, OPTIMIZE TABLE),
+
+\item {} 
+\sphinxAtStartPar
+Używanie narzędzi typu mysqlcheck do weryfikacji i naprawy tabel,
+
+\item {} 
+\sphinxAtStartPar
+Konfiguracja pliku my.cnf w celu dostosowania do wymagań aplikacji.
+
+\end{itemize}
+
+\end{enumerate}
+
+
+\subsubsection{SQLite (np. LightSQL)}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:sqlite-np-lightsql}}
+\sphinxAtStartPar
+SQLite, używana w aplikacjach mobilnych i desktopowych, różni się znacznie od serwerowych baz danych.
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Fizyczna konserwacja:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Brak klasycznego serwera \textendash{} baza to pojedynczy plik .db,
+
+\item {} 
+\sphinxAtStartPar
+Konieczność regularnego kopiowania pliku bazy danych jako backup.
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+Programowa konserwacja:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Użycie polecenia VACUUM do defragmentacji i zmniejszenia rozmiaru pliku,
+
+\item {} 
+\sphinxAtStartPar
+Ograniczone możliwości równoczesnego dostępu \textendash{} wymaga uwagi w aplikacjach wielowątkowych,
+
+\item {} 
+\sphinxAtStartPar
+Nie wymaga osobnych usług do zarządzania \textendash{} działa bezpośrednio w aplikacji.
+
+\end{itemize}
+
+\end{enumerate}
+
+
+\subsubsection{Microsoft SQL Server}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:microsoft-sql-server}}
+\sphinxAtStartPar
+System korporacyjny, szeroko wykorzystywany w dużych organizacjach.
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Fizyczna konserwacja:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Obsługuje macierze RAID i pamięci masowe SAN,
+
+\item {} 
+\sphinxAtStartPar
+Regularne kopie pełne, różnicowe i dzienniki transakcyjne.
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+Programowa konserwacja:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Zaawansowany SQL Server Agent \textendash{} możliwość harmonogramowania zadań,
+
+\item {} 
+\sphinxAtStartPar
+Narzędzia do monitorowania stanu instancji (SQL Profiler, Database Tuning Advisor),
+
+\item {} 
+\sphinxAtStartPar
+Wsparcie dla Always On Availability Groups dla wysokiej dostępności.
+
+\end{itemize}
+
+\end{enumerate}
+
+
+\subsection{Planowanie konserwacji bazy danych}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:planowanie-konserwacji-bazy-danych}}
+\sphinxAtStartPar
+Autor: Piotr Mikołajczyk
+
+\sphinxAtStartPar
+Konserwację bazy danych należy przeprowadzać regularnie, np. co tydzień lub co miesiąc. Nie powinna mieć miejsca w godzinach szczytu. Przeprowadzenie konserwacji może również okazać się koniecznie po wykryciu błędu lub wystąpieniu awarii.
+
+\sphinxAtStartPar
+Konserwacja może obejmować m.in. zmianę parametrów konfiguracji bazy, przeprowadzenie procesu VACUUM, zmianę uprawnien użytkowników, aktualizacje systemowe i wykonanie backupów lub przywrócenie danych.
+
+\sphinxAtStartPar
+Działanie te muszą zostać przeprowadzone w czasie, gdy mamy pewność, że żaden klient nie będzie podłączony, nie będą przeprowadzane żadne transakcje. Użytkownicy powinni być uprzednio poinformowani o czasie przeprowadzenia konserwacji. Mimo to, należy wcześniej sprawdzić, czy nie ma aktywnych sesji.
+
+
+\subsection{Uruchamianie, zatrzymywanie i restartowanie serwera bazy danych}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:uruchamianie-zatrzymywanie-i-restartowanie-serwera-bazy-danych}}
+\sphinxAtStartPar
+Autor: Piotr Mikołajczyk
+
+\sphinxAtStartPar
+Działania, takie jak aktualizacja oprogramowania, instalacja rozszerzeń, wprowadzenie pewnych zmian w plikach konfiguracyjnych, migracja danych, wykonanie backupów bazy, wymagają zrestartowania, zatrzymania bądź ponownego uruchomienia serwera bazy danych.
+
+
+\subsubsection{Uruchamianie}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:uruchamianie}}
+\sphinxAtStartPar
+Linux:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+sudo\PYG{+w}{ }systemctl\PYG{+w}{ }start\PYG{+w}{ }postgresql
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Windows CMD:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+net start postgresql\PYGZhy{}x64\PYGZhy{}15
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Windows PowerShell
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n+nb}{Start\PYGZhy{}Service} \PYG{n}{\PYGZhy{}Name} \PYG{n}{postgresql}\PYG{n}{\PYGZhy{}x64}\PYG{p}{\PYGZhy{}}\PYG{n}{15}
+\end{sphinxVerbatim}
+
+
+\subsubsection{Zatrzymywanie}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:zatrzymywanie}}
+\sphinxAtStartPar
+Linux:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+sudo\PYG{+w}{ }systemctl\PYG{+w}{ }stop\PYG{+w}{ }postgresql
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Windows CMD:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+net stop postgresql\PYGZhy{}x64\PYGZhy{}15
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Windows PowerShell
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n+nb}{Stop\PYGZhy{}Service} \PYG{n}{\PYGZhy{}Name} \PYG{n}{postgresql}\PYG{n}{\PYGZhy{}x64}\PYG{p}{\PYGZhy{}}\PYG{n}{15}
+\end{sphinxVerbatim}
+
+
+\subsubsection{Restartowanie}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:restartowanie}}
+\sphinxAtStartPar
+Linux:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+sudo\PYG{+w}{ }systemctl\PYG{+w}{ }restart\PYG{+w}{ }postgresql
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+W CMD nie istnieje osobne polecenie restartowania. Należy zatrzymać serwer, a następnie uruchomić go ponownie.
+
+\sphinxAtStartPar
+Windows PowerShell
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n+nb}{Restart\PYGZhy{}Service} \PYG{n}{\PYGZhy{}Name} \PYG{n}{postgresql}\PYG{n}{\PYGZhy{}x64}\PYG{p}{\PYGZhy{}}\PYG{n}{15}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Polecenia CMD mogą zostać również użyte w PowerShell.
+
+
+\subsection{Zarządzanie połączeniami użytkowników}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:zarzadzanie-polaczeniami-uzytkownikow}}
+\sphinxAtStartPar
+Autor: Piotr Mikołajczyk
+
+\sphinxAtStartPar
+Oprócz sytuacji, gdy trzeba zamknąć dostęp do bazy danych na czas konserwacji, połączenia użytkowników należy ograniczyć także wtedy, gdy sesja użytkownika została zawieszona lub zbyt wiele połączeń skutkuje nadmiernym zużyciem pamięci i mocy obliczeniowej, uniemożliwiając nawiązywanie nowych połączeń i spowolniając działanie serwera.
+
+
+\subsubsection{Ograniczanie użytkowników}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:ograniczanie-uzytkownikow}}
+\sphinxAtStartPar
+Istnieje kilka sposobów ograniczenia dostępu użytkownika:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Odebranie użytkownikowi prawa dostępu do bazy:
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{REVOKE}\PYG{+w}{ }\PYG{k}{CONNECT}\PYG{+w}{ }\PYG{k}{ON}\PYG{+w}{ }\PYG{k}{DATABASE}\PYG{+w}{ }\PYG{n}{baza}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{k}{user}\PYG{p}{;}
+\end{sphinxVerbatim}
+\end{quote}
+
+\item {} 
+\sphinxAtStartPar
+Limit liczby jednoczesnych połączeń:
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER}\PYG{+w}{ }\PYG{k}{ROLE}\PYG{+w}{ }\PYG{k}{user}\PYG{+w}{ }\PYG{k}{CONNECTION}\PYG{+w}{ }\PYG{k}{LIMIT}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{;}
+\end{sphinxVerbatim}
+\end{quote}
+
+\end{itemize}
+
+
+\subsubsection{Ręczne rozłączanie użytkowników}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:reczne-rozlaczanie-uzytkownikow}}
+\sphinxAtStartPar
+Według nazwy danego użytkownika:
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{pg\PYGZus{}terminate\PYGZus{}backend}\PYG{p}{(}\PYG{n}{pid}\PYG{p}{)}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{pg\PYGZus{}stat\PYGZus{}activity}
+\PYG{k}{WHERE}\PYG{+w}{ }\PYG{n}{usename}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}user\PYGZsq{}}\PYG{p}{;}
+\end{sphinxVerbatim}
+\end{quote}
+
+\sphinxAtStartPar
+Według PID (np. 12340):
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{pg\PYGZus{}terminate\PYGZus{}backend}\PYG{p}{(}\PYG{l+m+mi}{12340}\PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+\end{quote}
+
+
+\subsubsection{Automatyczne rozłączanie użytkowników}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:automatyczne-rozlaczanie-uzytkownikow}}
+\sphinxAtStartPar
+Sesja użytkownika lub jego zapytania mogą zostać rozłączone automatycznie, jeśli wprowadzimy pewne ograniczenia czasowe:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Rozłączenie sesji po przekroczeniu limitu czasu bezczynności podczas zapytania:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+dla bieżącej sesji:
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{SET}\PYG{+w}{ }\PYG{n}{idle\PYGZus{}in\PYGZus{}transaction\PYGZus{}session\PYGZus{}timeout}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}5min\PYGZsq{}}\PYG{p}{;}
+\end{sphinxVerbatim}
+\end{quote}
+
+\item {} 
+\sphinxAtStartPar
+dla danego użytkownika:
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER}\PYG{+w}{ }\PYG{k}{ROLE}\PYG{+w}{ }\PYG{k}{user}\PYG{+w}{ }\PYG{k}{SET}\PYG{+w}{ }\PYG{n}{idle\PYGZus{}in\PYGZus{}transaction\PYGZus{}session\PYGZus{}timeout}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}5min\PYGZsq{}}\PYG{p}{;}
+\end{sphinxVerbatim}
+\end{quote}
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+Limit czasu zapytania:
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER}\PYG{+w}{ }\PYG{k}{ROLE}\PYG{+w}{ }\PYG{k}{user}\PYG{+w}{ }\PYG{k}{SET}\PYG{+w}{ }\PYG{n}{statement\PYGZus{}timeout}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}30s\PYGZsq{}}\PYG{p}{;}
+\end{sphinxVerbatim}
+\end{quote}
+
+\end{itemize}
+
+
+\subsubsection{Zapobieganie nowym połączeniom}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:zapobieganie-nowym-polaczeniom}}
+\sphinxAtStartPar
+Zablokowanie logowania konkretnego użytkownika:
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER}\PYG{+w}{ }\PYG{k}{ROLE}\PYG{+w}{ }\PYG{k}{user}\PYG{+w}{ }\PYG{n}{NOLOGIN}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Odblokowanie:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER}\PYG{+w}{ }\PYG{k}{ROLE}\PYG{+w}{ }\PYG{k}{user}\PYG{+w}{ }\PYG{n}{LOGIN}\PYG{p}{;}
+\end{sphinxVerbatim}
+\end{quote}
+
+\sphinxAtStartPar
+Blokowanie nowych połączeń do bazy danych:
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{REVOKE}\PYG{+w}{ }\PYG{k}{CONNECT}\PYG{+w}{ }\PYG{k}{ON}\PYG{+w}{ }\PYG{k}{DATABASE}\PYG{+w}{ }\PYG{n}{baza}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{k}{PUBLIC}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+PUBLIC oznacza wszystkich użytkowników. Nadal połączeni użytkownicy nie są rozłączani.
+\end{quote}
+
+
+\subsection{Proces VACUUM}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:proces-vacuum}}
+\sphinxAtStartPar
+Autor: Piotr Mikołajczyk
+
+\sphinxAtStartPar
+DELETE nie usuwa rekordów z tabeli, jedynie oznacza je jako martwe. Podobnie UPDATE pozostawia stare wersje zaktualizowanych krotek.
+
+\sphinxAtStartPar
+Proces VACUUM przeszukuje tabele i indeksy, szukając martwych wierszy, które można fizycznie usunąć lub oznaczyć do nadpisania.
+
+\sphinxAtStartPar
+Może zostać przeprowadzony na kilka sposobów:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{VACUUM}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Usuwa martwe krotki, ale nie odzyskuje miejsca z dysku, a jedynie udostępnia je dla przyszłych danych,
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{VACUUM}\PYG{+w}{ }\PYG{k}{FULL}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Kompaktuje tabelę do nowego pliku, zwalnia miejsce w pamięci,
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{VACUUM}\PYG{+w}{ }\PYG{k}{ANALYZE}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Usuwa martwe krotki i przeprowadza aktualizację statystyk, nie odzyskuje miejsca.
+
+
+\subsubsection{Autovacuum}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:autovacuum}}
+\sphinxAtStartPar
+Autovacuum działa w tle, automatycznie wykonując VACUUM na odpowiednich tabelach. Dzięki niemu nie trzeba ręcznie uruchamiać VACUUM po każdej modyfikacji tabeli. Autovacuum posiada wiele parametrów, od których zależy kiedy wykonany zostanie proces, między innymi:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+autovacuum \sphinxhyphen{} parametr logiczny, decyduje, czy serwer będzie uruchamiał launcher procesu autovacuum,
+
+\item {} 
+\sphinxAtStartPar
+autovacuum\_max\_workers \sphinxhyphen{} liczba całkowita, określa maksymalną ilość procesów autovacuum mogących działać w tym samym czasie, domyślnie 3,
+
+\item {} 
+\sphinxAtStartPar
+autovacuum\_vacuum\_threshold \sphinxhyphen{} liczba całkowita, określa ile wierszy w jednej tabeli musi zostać usunięte lub zmienione, aby wywołano VACUUM, domyślnie 50,
+
+\item {} 
+\sphinxAtStartPar
+autovacuum\_vacuum\_scale\_factor \sphinxhyphen{} liczba zmiennoprzecinkowa, jaki procent tabeli musi zostać zmieniony aby wywołano VACUUM, domyślna wartość to 0.2 (20\%).
+
+\end{itemize}
+
+\sphinxAtStartPar
+Analogiczne parametry warunkują również wywołanie ANALYZE, na przykład autovacuum\_analyze\_threshold.
+
+\sphinxAtStartPar
+Próg uruchamiania VACUUM ustala się wzorem:
+\begin{quote}
+
+\sphinxAtStartPar
+autovacuum\_vacuum\_threshold + autovacuum\_vacuum\_scale\_factor * liczba\_wierszy
+\end{quote}
+
+\sphinxAtStartPar
+Podobnie dla ANALYZE:
+\begin{quote}
+
+\sphinxAtStartPar
+autovacuum\_analyze\_threshold + autovacuum\_analyze\_scale\_factor * liczba\_wierszy
+\end{quote}
+
+
+\subsection{Schemat bazy danych}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:schemat-bazy-danych}}
+\sphinxAtStartPar
+Autor: Bartłomiej Czyż
+
+
+\subsubsection{Czym jest schemat bazy danych?}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:czym-jest-schemat-bazy-danych}}
+\sphinxAtStartPar
+Schemat bazy danych to logiczna struktura opisująca organizację danych, typy danych, relacje między tabelami, ograniczenia integralności, procedury składowane, widoki i inne obiekty. Innymi słowy, schemat jest “szkieletem” bazy danych.
+
+\sphinxAtStartPar
+Przykładowe elementy schematu:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Tabele (np. users, orders),
+
+\item {} 
+\sphinxAtStartPar
+Typy danych (np. INT, VARCHAR, DATE),
+
+\item {} 
+\sphinxAtStartPar
+Klucze główne i obce,
+
+\item {} 
+\sphinxAtStartPar
+Indeksy,
+
+\item {} 
+\sphinxAtStartPar
+Widoki (VIEW),
+
+\item {} 
+\sphinxAtStartPar
+Procedury i funkcje (STORED PROCEDURES),
+
+\item {} 
+\sphinxAtStartPar
+Ograniczenia (CHECK, NOT NULL, UNIQUE).
+
+\end{itemize}
+
+
+\subsubsection{Rola schematu w konserwacji bazy danych}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:rola-schematu-w-konserwacji-bazy-danych}}
+\sphinxAtStartPar
+Schemat ma kluczowe znaczenie dla utrzymania spójności i integralności danych, dlatego jego kontrola i konserwacja obejmuje m.in.:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Dokumentację schematu \sphinxhyphen{} niezbędna przy aktualizacjach i migracjach,
+
+\item {} 
+\sphinxAtStartPar
+Weryfikację integralności relacji \sphinxhyphen{} sprawdzenie czy klucze obce i reguły są respektowane,
+
+\item {} 
+\sphinxAtStartPar
+Normalizację \sphinxhyphen{} kontrola nad nadmiarem danych i poprawnością logiczną,
+
+\item {} 
+\sphinxAtStartPar
+Aktualizacje schematu \sphinxhyphen{} np. dodawanie nowych kolumn, zmiana typu danych,
+
+\item {} 
+\sphinxAtStartPar
+Kontrola zgodności \sphinxhyphen{} wersjonowanie schematu (np. za pomocą narzędzi typu Liquibase, Flyway),
+
+\item {} 
+\sphinxAtStartPar
+Zabezpieczenia schematów \sphinxhyphen{} nadawanie uprawnień tylko zaufanym użytkownikom.
+
+\end{itemize}
+
+\sphinxAtStartPar
+Przykład konserwacji:
+
+\sphinxAtStartPar
+W PostgreSQL można analizować i optymalizować strukturę przy pomocy pgAdmin oraz narzędzi takich jak pg\_dump \textendash{}schema\sphinxhyphen{}only.
+
+
+\subsubsection{Różnice w implementacji schematu w różnych systemach}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:roznice-w-implementacji-schematu-w-roznych-systemach}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+MySQL \sphinxhyphen{} obsługuje wiele schematów w jednej bazie; ograniczone typy kolumn w starszych wersjach,
+
+\item {} 
+\sphinxAtStartPar
+PostgreSQL \sphinxhyphen{} bardzo elastyczny system schematów \sphinxhyphen{} możliwość teorzenia przestrzeni nazw,
+
+\item {} 
+\sphinxAtStartPar
+SQLite \sphinxhyphen{} pojedynczy schemat, uproszczony system typów,
+
+\item {} 
+\sphinxAtStartPar
+SQL Server \sphinxhyphen{} schemat jako logiczna przestrzeń obiektów, np. dbo, hr, finance.
+
+\end{itemize}
+
+
+\subsection{Transakcje}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:transakcje}}
+\sphinxAtStartPar
+Autor: Bartłomiej Czyż
+
+
+\subsubsection{Czym jest transakcja?}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:czym-jest-transakcja}}
+\sphinxAtStartPar
+Transakcja to zbiór operacji na bazie danych, które są traktowane jako jedna, nierozdzielna całość. Albo wykonują się wszystkie operacje, albo żadna \sphinxhyphen{} zasada atomiczności. Transakcje są podstawą do zachowania spójności danych, szczególnie w środowiskach wieloużytkownikowych.
+
+
+\subsubsection{Zasady ACID}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:zasady-acid}}
+\sphinxAtStartPar
+Transakcje w bazach danych opierają się na czterech podstawowych zasadach, znanych jako ACID:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+A \sphinxhyphen{} Atomicity (Atomowość) \sphinxhyphen{} operacje wchodzące w skład transakcji są niepodzielne \sphinxhyphen{} wszystkie muszą się powieść, lub wszystkie są wycofywane,
+
+\item {} 
+\sphinxAtStartPar
+C \sphinxhyphen{} Consistency (Spójność) \sphinxhyphen{} transakcje przekształcają dane ze stanu spójnego w stan spójny,
+
+\item {} 
+\sphinxAtStartPar
+I \sphinxhyphen{} Isolation (Izolacja) \sphinxhyphen{} równoczesne transakcje nie wpływają na siebie nawzajem,
+
+\item {} 
+\sphinxAtStartPar
+D \sphinxhyphen{} Durability (Trwałość) \sphinxhyphen{} po zatwierdzeniu transakcji dane są trwale zapisane, nawet w przypadku awarii.
+
+\end{itemize}
+
+
+\subsubsection{Rola transakcji w kontroli i konserwacji}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:rola-transakcji-w-kontroli-i-konserwacji}}
+\sphinxAtStartPar
+Transakcje mają ogromne znaczenie dla bezpieczeństwa danych, dlatego są nieodłącznym elementem procesów konserwacyjnych. Ich zastosowanie obejmuje:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Zabezpieczenie operacji aktualizacji \sphinxhyphen{} np. przy masowych zmianach danych,
+
+\item {} 
+\sphinxAtStartPar
+Replikacja i synchronizacja danych \sphinxhyphen{} transakcje zapewniają spójność między główną bazą, a replikami,
+
+\item {} 
+\sphinxAtStartPar
+Zarządzanie błędami \sphinxhyphen{} w przypadku błędu można wykonać ROLLBACK i przywrócić stan bazy,
+
+\item {} 
+\sphinxAtStartPar
+Tworzenie backupów spójnych z punktu w czasie \sphinxhyphen{} snapshoty danych często wymagają wsparcia transakcyjnego,
+
+\item {} 
+\sphinxAtStartPar
+Ochrona przed uszkodzeniami logicznymi \sphinxhyphen{} np. przez niekompletne aktualizacje.
+
+\end{itemize}
+
+
+\subsubsection{Różnice w implementacji transakcji w różnych systemach}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:roznice-w-implementacji-transakcji-w-roznych-systemach}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+MySQL \sphinxhyphen{} w pełni wspierane w silniku InnoDB; START TRANSACTION, COMMIT, ROLLBACK,
+
+\item {} 
+\sphinxAtStartPar
+PostgreSQL \sphinxhyphen{} silne wsparcie ACID, zaawansowana izolacja (REPEATABLE READ, SERIALIZABLE),
+
+\item {} 
+\sphinxAtStartPar
+SQLite \sphinxhyphen{} transakcje działają w trybie plikowym; BEGIN, COMMIT i ROLLBACK są wspierane,
+
+\item {} 
+\sphinxAtStartPar
+SQL Server \sphinxhyphen{} zaawansowany mechanizm transakcji z kontrolą poziomów izolacji, także eksplicytny SAVEPOINT.
+
+\end{itemize}
+
+
+\subsection{Literatura}
+\label{\detokenize{rozdzial2/Kontrola_i_konserwacja/kontrola_i_konserwacja:literatura}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxhref{https://www.postgresql.org/docs/current/index.html}{Oficjalna dokumentacja PostgreSQL}
+
+\item {} 
+\sphinxAtStartPar
+Riggs S., Krosing H., PostgreSQL. Receptury dla administratora, Helion 2011
+
+\item {} 
+\sphinxAtStartPar
+Matthew N., Stones R., Beginning Databases with PostgreSQL. From Novice to Professional, Apress 2006
+
+\item {} 
+\sphinxAtStartPar
+Juba S., Vannahme A., Volkov A., Learning PostgreSQL, Packt Publishing 2015
+
+\end{itemize}
+
+\sphinxstepscope
+
+
+\section{Partycjonowanie danych w PostgreSQL \textendash{} analiza, typy, zastosowania i dobre praktyki}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:partycjonowanie-danych-w-postgresql-analiza-typy-zastosowania-i-dobre-praktyki}}\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie::doc}}\begin{quote}\begin{description}
+\sphinxlineitem{Autor}
+\sphinxAtStartPar
+Bartosz Potoczny
+
+\sphinxlineitem{Data}
+\sphinxAtStartPar
+2025\sphinxhyphen{}06\sphinxhyphen{}12
+
+\end{description}\end{quote}
+
+
+\subsection{Streszczenie}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:streszczenie}}
+\sphinxAtStartPar
+Celem niniejszego sprawozdania jest kompleksowa analiza zagadnienia partycjonowania danych w systemie zarządzania relacyjną bazą danych PostgreSQL. Praca omawia teoretyczne podstawy partycjonowania, szczegółowo wyjaśnia wszystkie dostępne mechanizmy oraz przedstawia metody realizacji partycjonowania w praktyce. Zaprezentowano również typowe scenariusze użycia, narzędzia monitorowania oraz najlepsze praktyki projektowe. Całość przeanalizowano pod kątem wydajności, utrzymania i bezpieczeństwa danych.
+
+
+\subsection{1. Wprowadzenie}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:wprowadzenie}}
+\sphinxAtStartPar
+Współczesne systemy informatyczne generują i przetwarzają coraz większe ilości danych, co wymusza stosowanie zaawansowanych mechanizmów optymalizacji przechowywania i dostępu do informacji. Partycjonowanie danych jest jedną z kluczowych technik pozwalających na poprawę wydajności, skalowalności i zarządzalności baz danych. PostgreSQL, jako zaawansowany system zarządzania relacyjną bazą danych (RDBMS), oferuje rozbudowane wsparcie dla partycjonowania, umożliwiając dostosowanie architektury bazy do indywidualnych potrzeb.
+
+
+\subsection{2. Definicja i cel partycjonowania}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:definicja-i-cel-partycjonowania}}
+\sphinxAtStartPar
+Partycjonowanie polega na logicznym podziale dużej tabeli na mniejsze, łatwiejsze w zarządzaniu fragmenty zwane partycjami. Mimo fizycznego rozdzielenia, partycje są prezentowane użytkownikowi jako jedna wspólna tabela nadrzędna (ang. partitioned table, master table). Celem partycjonowania jest:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Zwiększenie wydajności operacji SELECT, INSERT, UPDATE, DELETE poprzez ograniczenie zakresu danych do przeszukania (partition pruning).
+
+\item {} 
+\sphinxAtStartPar
+Ułatwienie zarządzania i archiwizacji danych (np. szybkie usuwanie lub przenoszenie całych partycji).
+
+\item {} 
+\sphinxAtStartPar
+Lepsze rozłożenie obciążenia (możliwość przechowywania partycji na różnych dyskach/tablespaces).
+
+\item {} 
+\sphinxAtStartPar
+Zmniejszenie ryzyka zablokowania całej tabeli podczas operacji konserwacyjnych (VACUUM, REINDEX itp.).
+
+\end{itemize}
+
+
+\subsection{3. Modele i typy partycjonowania w PostgreSQL}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:modele-i-typy-partycjonowania-w-postgresql}}
+\sphinxAtStartPar
+PostgreSQL obsługuje trzy podstawowe typy partycjonowania:
+
+\sphinxAtStartPar
+\#\#\# 3.1 Partycjonowanie zakresowe (RANGE)
+
+\sphinxAtStartPar
+Dane są przypisywane do partycji na podstawie wartości mieszczącej się w określonym zakresie (np. daty, numery, id). Każda partycja odpowiada innemu przedziałowi.
+
+\sphinxAtStartPar
+\sphinxstylestrong{Przykład:}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{events}\PYG{+w}{ }\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{event\PYGZus{}id}\PYG{+w}{ }\PYG{n+nb}{serial}\PYG{+w}{ }\PYG{k}{PRIMARY}\PYG{+w}{ }\PYG{k}{KEY}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{event\PYGZus{}date}\PYG{+w}{ }\PYG{n+nb}{date}\PYG{+w}{ }\PYG{k}{NOT}\PYG{+w}{ }\PYG{k}{NULL}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{description}\PYG{+w}{ }\PYG{n+nb}{text}
+\PYG{p}{)}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{BY}\PYG{+w}{ }\PYG{n}{RANGE}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{event\PYGZus{}date}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{events\PYGZus{}2023}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{events}
+\PYG{+w}{    }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2023\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{TO}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2024\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{events\PYGZus{}2024}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{events}
+\PYG{+w}{    }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2024\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{TO}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2025\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Zastosowania:} logi systemowe, zamówienia, dane czasowe.
+
+\sphinxAtStartPar
+\#\#\# 3.2 Partycjonowanie listowe (LIST)
+
+\sphinxAtStartPar
+Dane są przypisywane do partycji na podstawie konkretnej wartości z listy (np. kraj, status, kategoria).
+
+\sphinxAtStartPar
+\sphinxstylestrong{Przykład:}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{sales}\PYG{+w}{ }\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{sale\PYGZus{}id}\PYG{+w}{ }\PYG{n+nb}{serial}\PYG{+w}{ }\PYG{k}{PRIMARY}\PYG{+w}{ }\PYG{k}{KEY}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{country}\PYG{+w}{ }\PYG{n+nb}{text}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{value}\PYG{+w}{ }\PYG{n+nb}{numeric}
+\PYG{p}{)}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{BY}\PYG{+w}{ }\PYG{n}{LIST}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{country}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{sales\PYGZus{}pl}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{sales}\PYG{+w}{ }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{IN}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Poland\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{sales\PYGZus{}de}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{sales}\PYG{+w}{ }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{IN}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Germany\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{sales\PYGZus{}other}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{sales}\PYG{+w}{ }\PYG{k}{DEFAULT}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Zastosowania:} dane geograficzne, statusowe, podział według typu klienta.
+
+\sphinxAtStartPar
+\#\#\# 3.3 Partycjonowanie haszowe (HASH)
+
+\sphinxAtStartPar
+Dane są rozdzielane pomiędzy partycje na podstawie funkcji haszującej zastosowanej do wybranej kolumny. Pozwala to równomiernie rozłożyć dane, gdy nie ma logicznego podziału zakresowego ani listowego.
+
+\sphinxAtStartPar
+\sphinxstylestrong{Przykład:}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{logs}\PYG{+w}{ }\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{log\PYGZus{}id}\PYG{+w}{ }\PYG{n+nb}{serial}\PYG{+w}{ }\PYG{k}{PRIMARY}\PYG{+w}{ }\PYG{k}{KEY}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{user\PYGZus{}id}\PYG{+w}{ }\PYG{n+nb}{int}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{log\PYGZus{}time}\PYG{+w}{ }\PYG{k}{timestamp}
+\PYG{p}{)}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{BY}\PYG{+w}{ }\PYG{n}{HASH}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{user\PYGZus{}id}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{logs\PYGZus{}p0}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{logs}\PYG{+w}{ }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{WITH}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{MODULUS}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REMAINDER}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{logs\PYGZus{}p1}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{logs}\PYG{+w}{ }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{WITH}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{MODULUS}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REMAINDER}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{logs\PYGZus{}p2}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{logs}\PYG{+w}{ }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{WITH}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{MODULUS}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REMAINDER}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{logs\PYGZus{}p3}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{logs}\PYG{+w}{ }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{WITH}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{MODULUS}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{REMAINDER}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Zastosowania:} przypadki wymagające równomiernego rozłożenia danych, np. duże systemy telemetryczne.
+
+\sphinxAtStartPar
+\#\#\# 3.4 Partycjonowanie wielopoziomowe (Composite/Hierarchical Partitioning)
+
+\sphinxAtStartPar
+PostgreSQL umożliwia tworzenie partycji podrzędnych, czyli partycjonowanie już partycjonowanych tabel (tzw. subpartitioning).
+
+\sphinxAtStartPar
+\sphinxstylestrong{Przykład:}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{measurements}\PYG{+w}{ }\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{id}\PYG{+w}{ }\PYG{n+nb}{serial}\PYG{+w}{ }\PYG{k}{PRIMARY}\PYG{+w}{ }\PYG{k}{KEY}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{region}\PYG{+w}{ }\PYG{n+nb}{text}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{measurement\PYGZus{}date}\PYG{+w}{ }\PYG{n+nb}{date}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{value}\PYG{+w}{ }\PYG{n+nb}{numeric}
+\PYG{p}{)}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{BY}\PYG{+w}{ }\PYG{n}{LIST}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{region}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{measurements\PYGZus{}europe}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{measurements}
+\PYG{+w}{    }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{IN}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Europe\PYGZsq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{BY}\PYG{+w}{ }\PYG{n}{RANGE}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{measurement\PYGZus{}date}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{measurements\PYGZus{}europe\PYGZus{}2024}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{measurements\PYGZus{}europe}
+\PYG{+w}{    }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2024\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{TO}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2025\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Zastosowania:} bardzo duże tabele, złożona struktura danych (np. po regionie i dacie).
+
+
+\subsection{4. Implementacja partycjonowania w praktyce}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:implementacja-partycjonowania-w-praktyce}}
+\sphinxAtStartPar
+\#\#\# 4.1 Tworzenie i zarządzanie partycjami
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Tworzenie partycji:} Partycje tworzone są jako osobne tabele, ale zarządzane przez tabelę nadrzędną.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Dodawanie partycji:} Możliwe w dowolnym momencie przy użyciu CREATE TABLE … PARTITION OF.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Usuwanie partycji:} ALTER TABLE … DETACH PARTITION + DROP TABLE (po odłączeniu partycji).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Domyślna partycja:} Można zdefiniować partycję przechowującą dane niepasujące do żadnej innej (DEFAULT).
+
+\end{itemize}
+
+\sphinxAtStartPar
+\#\#\# 4.2 Wstawianie i odczyt danych
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Dane są automatycznie kierowane do właściwej partycji na podstawie klucza partycjonowania.
+
+\item {} 
+\sphinxAtStartPar
+W przypadku braku pasującej partycji (i braku DEFAULT) \textendash{} błąd constraint violation.
+
+\item {} 
+\sphinxAtStartPar
+Zapytania ograniczone do klucza partycjonowania korzystają z partition pruning \textendash{} przeszukują tylko wybrane partycje.
+
+\end{itemize}
+
+\sphinxAtStartPar
+\#\#\# 4.3 Indeksowanie partycji
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Możliwe jest tworzenie indeksów na każdej partycji osobno lub dziedziczenie indeksów z tabeli nadrzędnej (od PostgreSQL 11 wzwyż).
+
+\item {} 
+\sphinxAtStartPar
+Indeksy globalne (na całą tabelę partycjonowaną) nie są jeszcze dostępne (stan na 2025).
+
+\end{itemize}
+
+\sphinxAtStartPar
+\#\#\# 4.4 Ograniczenia partycjonowania
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Klucz partycjonowania musi być częścią klucza głównego (PRIMARY KEY).
+
+\item {} 
+\sphinxAtStartPar
+Niektóre operacje mogą wymagać wykonywania osobno na każdej partycji (np. VACUUM, REINDEX).
+
+\item {} 
+\sphinxAtStartPar
+Wersje PostgreSQL \textless{}10 obsługują partycjonowanie tylko przez dziedziczenie \textendash{} obecnie uznawane za przestarzałe.
+
+\end{itemize}
+
+
+\subsection{5. Monitorowanie i administracja}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:monitorowanie-i-administracja}}
+\sphinxAtStartPar
+\#\#\# 5.1 Sprawdzanie rozmieszczenia danych
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{tableoid}\PYG{p}{:}\PYG{p}{:}\PYG{n}{regclass}\PYG{+w}{ }\PYG{k}{AS}\PYG{+w}{ }\PYG{n}{partition}\PYG{p}{,}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{measurements}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\#\#\# 5.2 Lista partycji
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{inhrelid}\PYG{p}{:}\PYG{p}{:}\PYG{n}{regclass}\PYG{+w}{ }\PYG{k}{AS}\PYG{+w}{ }\PYG{n}{partition}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{pg\PYGZus{}inherits}
+\PYG{k}{WHERE}\PYG{+w}{ }\PYG{n}{inhparent}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}measurements\PYGZsq{}}\PYG{p}{:}\PYG{p}{:}\PYG{n}{regclass}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\#\#\# 5.3 Rozmiar partycji
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{relname}\PYG{+w}{ }\PYG{k}{AS}\PYG{+w}{ }\PYG{l+s+ss}{\PYGZdq{}Partition\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{pg\PYGZus{}size\PYGZus{}pretty}\PYG{p}{(}\PYG{n}{pg\PYGZus{}total\PYGZus{}relation\PYGZus{}size}\PYG{p}{(}\PYG{n}{relid}\PYG{p}{)}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{AS}\PYG{+w}{ }\PYG{l+s+ss}{\PYGZdq{}Size\PYGZdq{}}
+\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{pg\PYGZus{}catalog}\PYG{p}{.}\PYG{n}{pg\PYGZus{}statio\PYGZus{}user\PYGZus{}tables}
+\PYG{k}{WHERE}\PYG{+w}{ }\PYG{n}{relname}\PYG{+w}{ }\PYG{k}{LIKE}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}measurements\PYGZpc{}\PYGZsq{}}
+\PYG{k}{ORDER}\PYG{+w}{ }\PYG{k}{BY}\PYG{+w}{ }\PYG{n}{pg\PYGZus{}total\PYGZus{}relation\PYGZus{}size}\PYG{p}{(}\PYG{n}{relid}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{DESC}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\#\#\# 5.4 Analiza planu zapytania (partition pruning)
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{EXPLAIN}\PYG{+w}{ }\PYG{k}{ANALYZE}
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{measurements}\PYG{+w}{ }\PYG{k}{WHERE}\PYG{+w}{ }\PYG{n}{region}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}Europe\PYGZsq{}}\PYG{+w}{ }\PYG{k}{AND}\PYG{+w}{ }\PYG{n}{measurement\PYGZus{}date}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}2024\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{;}
+
+\PYG{c+c1}{\PYGZhy{}\PYGZhy{} W planie widać użycie tylko właściwych partycji.}
+\end{sphinxVerbatim}
+
+
+\subsection{6. Typowe scenariusze zastosowań}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:typowe-scenariusze-zastosowan}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Przetwarzanie danych czasowych:} partycjonowanie zakresowe po dacie (logi, zamówienia, pomiary).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Dane geograficzne lub kategoryczne:} partycjonowanie listowe (kraj, region, kategoria produktu).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Systemy telemetryczne i IoT:} partycjonowanie haszowe lub wielopoziomowe (np. urządzenie + czas).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Duże systemy ERP/CRM:} partycjonowanie po kliencie, regionie, a następnie po dacie.
+
+\end{itemize}
+
+
+\subsection{7. Dobre praktyki projektowania partycji}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:dobre-praktyki-projektowania-partycji}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Dobór klucza partycjonowania:} Powinien odpowiadać najczęściej używanym warunkom w zapytaniach WHERE.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Optymalna liczba partycji:} Zbyt mała liczba partycji nie daje efektu, zbyt duża zwiększa narzut administracyjny.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Automatyzacja tworzenia partycji:} Skrypty lub narzędzia generujące nowe partycje np. na kolejne miesiące/lata.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Monitorowanie wydajności:} Regularne sprawdzanie rozmiarów partycji, statystyk oraz planów wykonania zapytań.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Bezpieczeństwo danych:} Możliwość szybkiego backupu lub usunięcia starych partycji.
+
+\end{itemize}
+
+
+\subsection{8. Ograniczenia i potencjalne problemy}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:ograniczenia-i-potencjalne-problemy}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+Brak natywnych indeksów globalnych (stan na 2025) utrudnia niektóre zapytania przekrojowe.
+
+\item {} 
+\sphinxAtStartPar
+Operacje DDL na tabeli nadrzędnej mogą być kosztowne przy dużej liczbie partycji.
+
+\item {} 
+\sphinxAtStartPar
+Niektóre narzędzia zewnętrzne mogą nie obsługiwać partycji w pełni transparentnie.
+
+\item {} 
+\sphinxAtStartPar
+Przenoszenie danych między partycjami wymaga operacji INSERT + DELETE lub narzędzi specjalistycznych.
+
+\end{itemize}
+
+
+\subsection{9. Podsumowanie i wnioski}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:podsumowanie-i-wnioski}}
+\sphinxAtStartPar
+Partycjonowanie danych w PostgreSQL jest zaawansowanym i elastycznym narzędziem, pozwalającym na istotną poprawę wydajności oraz ułatwiającym zarządzanie dużymi zbiorami danych. Właściwy dobór typu partycjonowania, klucza oraz liczby i organizacji partycji wymaga analizy charakterystyki danych i typowych zapytań. Zaleca się regularne monitorowanie i dostosowywanie architektury partycjonowania, zwłaszcza w przypadku dynamicznie rosnących zbiorów danych.
+
+
+\subsection{10. Krótkie porównanie partycjonowania w PostgreSQL i innych systemach bazodanowych}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:krotkie-porownanie-partycjonowania-w-postgresql-i-innych-systemach-bazodanowych}}
+\sphinxAtStartPar
+Partycjonowanie danych jest wspierane przez większość nowoczesnych systemów baz danych, jednak szczegóły implementacji i dostępne możliwości mogą się różnić:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{PostgreSQL:}
+Umożliwia partycjonowanie zakresowe, listowe, haszowe oraz wielopoziomowe (od wersji 10). Partycje są w pełni zintegrowane z silnikiem (od wersji 10), a operacje na partycjonowanych tabelach są transparentne dla użytkownika. Nie obsługuje jeszcze natywnych indeksów globalnych (stan na 2025).
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Oracle Database:}
+Bardzo rozbudowane opcje partycjonowania (RANGE, LIST, HASH, COMPOSITE), obsługuje indeksy lokalne i globalne, automatyczne zarządzanie partycjami, także partycjonowanie na poziomie fizycznym (np. partycjonowanie indeksów, tabel LOB). Mechanizmy zaawansowane, ale często dostępne tylko w płatnych edycjach.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{MySQL (InnoDB):}
+Wspiera partycjonowanie RANGE, LIST, HASH, KEY. Możliwości są jednak bardziej ograniczone niż w PostgreSQL czy Oracle. Nie wszystkie operacje i typy indeksów są wspierane na partycjonowanych tabelach.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{Microsoft SQL Server:}
+Umożliwia partycjonowanie tabel i indeksów przy użyciu tzw. partition schemes i partition functions. Pozwala na łatwe przenoszenie partycji oraz obsługuje indeksy globalne, co ułatwia optymalizację zapytań przekrojowych.
+
+\end{itemize}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Podsumowanie:}
+PostgreSQL oferuje bardzo elastyczne i wydajne partycjonowanie, jednak niektóre zaawansowane funkcje (np. partycjonowanie indeksów globalnych) są jeszcze w fazie rozwoju, podczas gdy w Oracle czy SQL Server są już dojrzałymi rozwiązaniami.
+
+
+\subsection{11. Przykład migracji niepartyconowanej tabeli na partycjonowaną}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:przyklad-migracji-niepartyconowanej-tabeli-na-partycjonowana}}
+\sphinxAtStartPar
+Migracja istniejącej tabeli na partycjonowaną w PostgreSQL wymaga kilku kroków. Oto przykładowy proces dla tabeli \sphinxcode{\sphinxupquote{orders}}:
+
+\sphinxAtStartPar
+\sphinxstylestrong{Załóżmy, że mamy tabelę:}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{orders}\PYG{+w}{ }\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{id}\PYG{+w}{ }\PYG{n+nb}{serial}\PYG{+w}{ }\PYG{k}{PRIMARY}\PYG{+w}{ }\PYG{k}{KEY}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{order\PYGZus{}date}\PYG{+w}{ }\PYG{n+nb}{date}\PYG{+w}{ }\PYG{k}{NOT}\PYG{+w}{ }\PYG{k}{NULL}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{customer\PYGZus{}id}\PYG{+w}{ }\PYG{n+nb}{int}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{amount}\PYG{+w}{ }\PYG{n+nb}{numeric}
+\PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxstylestrong{Chcemy ją partycjonować po kolumnie \textasciigrave{}\textasciigrave{}order\_date\textasciigrave{}\textasciigrave{} (zakresy roczne):}
+\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Zmień nazwę oryginalnej tabeli:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{ALTER}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{orders}\PYG{+w}{ }\PYG{k}{RENAME}\PYG{+w}{ }\PYG{k}{TO}\PYG{+w}{ }\PYG{n}{orders\PYGZus{}old}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+Utwórz nową tabelę partycjonowaną:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{orders}\PYG{+w}{ }\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{id}\PYG{+w}{ }\PYG{n+nb}{serial}\PYG{+w}{ }\PYG{k}{PRIMARY}\PYG{+w}{ }\PYG{k}{KEY}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{order\PYGZus{}date}\PYG{+w}{ }\PYG{n+nb}{date}\PYG{+w}{ }\PYG{k}{NOT}\PYG{+w}{ }\PYG{k}{NULL}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{customer\PYGZus{}id}\PYG{+w}{ }\PYG{n+nb}{int}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{amount}\PYG{+w}{ }\PYG{n+nb}{numeric}
+\PYG{p}{)}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{BY}\PYG{+w}{ }\PYG{n}{RANGE}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{order\PYGZus{}date}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{orders\PYGZus{}2023}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{orders}
+\PYG{+w}{    }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2023\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{TO}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2024\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{k}{CREATE}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{orders\PYGZus{}2024}\PYG{+w}{ }\PYG{n}{PARTITION}\PYG{+w}{ }\PYG{k}{OF}\PYG{+w}{ }\PYG{n}{orders}
+\PYG{+w}{    }\PYG{k}{FOR}\PYG{+w}{ }\PYG{k}{VALUES}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2024\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{TO}\PYG{+w}{ }\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2025\PYGZhy{}01\PYGZhy{}01\PYGZsq{}}\PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+Skopiuj dane do partycji:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{INSERT}\PYG{+w}{ }\PYG{k}{INTO}\PYG{+w}{ }\PYG{n}{orders}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{id}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{order\PYGZus{}date}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{customer\PYGZus{}id}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{amount}\PYG{p}{)}
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{id}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{order\PYGZus{}date}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{customer\PYGZus{}id}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{amount}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{orders\PYGZus{}old}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+Sprawdź, czy dane zostały poprawnie rozdzielone:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT}\PYG{+w}{ }\PYG{n}{tableoid}\PYG{p}{:}\PYG{p}{:}\PYG{n}{regclass}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{COUNT}\PYG{p}{(}\PYG{o}{*}\PYG{p}{)}\PYG{+w}{ }\PYG{k}{FROM}\PYG{+w}{ }\PYG{n}{orders}\PYG{+w}{ }\PYG{k}{GROUP}\PYG{+w}{ }\PYG{k}{BY}\PYG{+w}{ }\PYG{n}{tableoid}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+Usuń starą tabelę po upewnieniu się, że wszystko działa:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{DROP}\PYG{+w}{ }\PYG{k}{TABLE}\PYG{+w}{ }\PYG{n}{orders\PYGZus{}old}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\end{enumerate}
+
+\sphinxAtStartPar
+Można też użyć narzędzi automatyzujących migracje (np. pg\_partman), jeśli tabel jest bardzo dużo lub są bardzo duże.
+
+
+\subsection{12. Bibliografia}
+\label{\detokenize{rozdzial2/Partycjonowanie-danych/source/Partycjonowanie:bibliografia}}\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+Dokumentacja PostgreSQL: \sphinxurl{https://www.postgresql.org/docs/current/ddl-partitioning.html}
+
+\item {} 
+\sphinxAtStartPar
+“PostgreSQL. Zaawansowane techniki programistyczne”, Grzegorz Wójtowicz, Helion 2021
+
+\item {} 
+\sphinxAtStartPar
+\sphinxurl{https://wiki.postgresql.org/wiki/Partitioning}
+
+\item {} 
+\sphinxAtStartPar
+Oficjalny blog PostgreSQL: \sphinxurl{https://www.postgresql.org/about/news/}
+
+\end{enumerate}
+
+\sphinxstepscope
+
+
 \chapter{Projektowanie bazy danych \sphinxhyphen{} modele}
 \label{\detokenize{rozdzial3/index:projektowanie-bazy-danych-modele}}\label{\detokenize{rozdzial3/index::doc}}\begin{quote}\begin{description}
 \sphinxlineitem{author}
@@ -2344,6 +5087,26 @@ Sprzęt dla bazy danych: \sphinxurl{https://github.com/oszczeda/Sprzet-dla-bazy-
 \item {} 
 \sphinxAtStartPar
 Konfiguracja baz danych: \sphinxurl{https://github.com/Chaiolites/Konfiguracja\_baz\_danych.git}
+
+\item {} 
+\sphinxAtStartPar
+Bezpieczeństwo: \sphinxurl{https://github.com/BlazejUl/bezpieczenstwo.git}
+
+\item {} 
+\sphinxAtStartPar
+Monitorowanie i diagnostyka: \sphinxurl{https://github.com/GrzegorzSzczepanek/repo-wspolne.git}
+
+\item {} 
+\sphinxAtStartPar
+Kopie zapasowe i odzyskiwanie danych: \sphinxurl{https://github.com/m-smieja/Kopie\_zapasowe\_i\_odzyskiwanie\_danych.git}
+
+\item {} 
+\sphinxAtStartPar
+Kontrola i konserwacja: \sphinxurl{https://github.com/Pi0trM/Kontrola\_i\_konserwacja.git}
+
+\item {} 
+\sphinxAtStartPar
+Partycjonowanie danych: \sphinxurl{https://github.com/BartekHen/Partycjonowanie-danych.git}
 
 \end{enumerate}
 

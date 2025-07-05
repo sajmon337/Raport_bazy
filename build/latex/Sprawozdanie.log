@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.2)  4 JUL 2025 17:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.2)  5 JUL 2025 17:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -899,7 +899,9 @@ teusz/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ec.enc}]
 
 
 
-])
+]
+
+[3])
 \tf@toc=\write6
 \openout6 = `Sprawozdanie.toc'.
 
@@ -912,11 +914,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[3]
+[4]
 Chapter 1.
 
 
-[4
+[5
 
 ]
 Chapter 2.
@@ -926,19 +928,10 @@ LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 1
 File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
 )
 
-[5
+[6
 
 {C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1.
 enc}]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[6]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -984,6 +977,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [11]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[12]
 Underfull \hbox (badness 10000) in paragraph at lines 530--533
 \T1/qtm/m/n/10.95 [1] Post-greSQL Doc-u-men-ta-tion ^^U Per-for-mance Tips [][]
 $https : / / www . postgresql . org / docs / current /
@@ -1004,7 +1006,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[12]
+[13]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1013,7 +1015,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[13]
+[14]
 LaTeX Font Info:    Trying to load font information for T1+txtt on input line 7
 00.
 
@@ -1028,7 +1030,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[14]
+[15]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1037,7 +1039,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[15]
+[16]
 LaTeX Font Info:    Font shape `T1/txtt/m/it' in size <10.95> not available
 (Font)              Font shape `T1/txtt/m/sl' tried instead on input line 822.
 LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10.95> not available
@@ -1056,15 +1058,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[16]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [17]
 
 
@@ -1075,6 +1068,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [18]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[19]
 Underfull \hbox (badness 10000) in paragraph at lines 1148--1148
 []\T1/qtm/m/n/10.95 main-te-
  []
@@ -1088,22 +1090,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[19]
+[20]
 Underfull \hbox (badness 10000) in paragraph at lines 1297--1299
 []\T1/qtm/m/n/10.95 Ad-min-is-tra-tor mo»e równie» kon-trolowa¢ cz¦s-totli-wo±¢
  ak-tu-al-iza-cji statystyk (np.
  []
 
 
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[20]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1140,16 +1133,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [24]
-Chapter 3.
 
 
-[25
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-]
-Overfull \vbox (2.96326pt too high) detected at line 1870
- []
-
-
+[25]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1159,76 +1151,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [26]
-Underfull \hbox (badness 10000) in paragraph at lines 2058--2058
-[]\T1/qhv/m/n/10.95 pa-
- []
-
-
-Overfull \hbox (7.0858pt too wide) in paragraph at lines 2058--2058
-[]\T1/qhv/m/n/10.95 first_name| 
- []
-
-
-Overfull \hbox (5.01396pt too wide) in paragraph at lines 2058--2058
-[]\T1/qhv/m/n/10.95 last_name| 
- []
-
-
-Overfull \hbox (4.79414pt too wide) in paragraph at lines 2058--2058
-[]\T1/qhv/m/n/10.95 birth_date| 
- []
-
-
-Overfull \hbox (7.3135pt too wide) in paragraph at lines 2058--2058
-[]\T1/qtm/m/n/10.95 Wi±niewska| 
- []
-
-
-Overfull \hbox (8.34875pt too wide) in paragraph at lines 2058--2058
-[]\T1/qtm/m/n/10.95 90010112345| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2058--2058
-[]\T1/qtm/m/n/10.95 1990-01-
- []
-
-
-Overfull \hbox (7.89714pt too wide) in paragraph at lines 2058--2058
-[][][]\T1/qtm/m/n/10.95 maria@example.com[][]| 
- []
-
-
-Overfull \hbox (9.20488pt too wide) in paragraph at lines 2058--2058
-[]\T1/qtm/m/n/10.95 +48123123123| 
- []
-
-
-Overfull \hbox (1.94803pt too wide) in paragraph at lines 2058--2058
-[]\T1/qtm/m/n/10.95 D¡browski| 
- []
-
-
-Overfull \hbox (8.34875pt too wide) in paragraph at lines 2058--2058
-[]\T1/qtm/m/n/10.95 85050554321| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2058--2058
-[]\T1/qtm/m/n/10.95 1985-05-
- []
-
-
-Overfull \hbox (13.76633pt too wide) in paragraph at lines 2058--2058
-[][][]\T1/qtm/m/n/10.95 tomasz@example.com[][]| 
- []
-
-
-Overfull \hbox (9.20488pt too wide) in paragraph at lines 2058--2058
-[]\T1/qtm/m/n/10.95 +48987654321| 
- []
-
-
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1247,12 +1169,21 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [28]
-Chapter 4.
+Underfull \hbox (badness 5147) in paragraph at lines 2033--2035
+\T1/qtm/m/n/10.95 Kon-fig-u-racja ser-w-era: musimy edy-towa¢ dwa pliki i zrest
+ar-towa¢ ser-wer Post-greSQL. Plik
+ []
 
 
-[29
 
-]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[29]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1271,11 +1202,445 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [31]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[32]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[33]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[34]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[35]
+Underfull \hbox (badness 10000) in paragraph at lines 2417--2419
+[]\T1/qtm/m/n/10.95 Za-py-tanie mon-i-toru-j¡ce opó¹nie-nie rep-likacji: ^^PSE-
+LECT ap-pli-ca-tion_name,
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[36]
+Underfull \hbox (badness 10000) in paragraph at lines 2488--2490
+[][][]$\T1/qtm/m/n/10.95 https : / / www . alibabacloud . com / help / en / ana
+lyticdb / analyticdb-[]for-[]postgresql / use-[]cases /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2520--2522
+[][][]$\T1/qtm/m/n/10.95 https : / / techdocs . broadcom . com / us / en / vmwa
+re-[]tanzu / data-[]solutions / tanzu-[]greenplum / 6 /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2528--2530
+[][][]$\T1/qtm/m/n/10.95 https : / / www . reddit . com / r / PostgreSQL / comm
+ents / 1auy79s / suggestions _ for _ postgresql _
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[37]
+Underfull \hbox (badness 10000) in paragraph at lines 2556--2558
+[][][]$\T1/qtm/m/n/10.95 https : / / support . nagios . com / kb / article / xi
+-[]5-[]10-[]0-[]and-[]newer-[]postgress-[]to-[]mysql-[]conversion-[]560 .
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[38]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[39]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[40]
+LaTeX Font Info:    Trying to load font information for U+fontawesomefree1 on i
+nput line 2893.
+
+(C:\Users\Mateusz\AppData\Local\Programs\MiKTeX\tex/latex/fontawesome5\ufontawe
+somefree1.fd)
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[41{C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/fontawesome5
+/fa5free1.enc}]
+LaTeX Font Info:    Trying to load font information for U+fontawesomefree2 on i
+nput line 3008.
+
+(C:\Users\Mateusz\AppData\Local\Programs\MiKTeX\tex/latex/fontawesome5\ufontawe
+somefree2.fd)
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[42{C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/fontawesome5
+/fa5free2.enc}]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[43]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[44]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[45]
+Underfull \hbox (badness 6927) in paragraph at lines 3420--3422
+[]\T1/qtm/m/n/10.95 Ogranic-zone mo»li-wo±ci równoczes-nego dost¦pu ^^U wymaga 
+uwagi w ap-likac-jach
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[46]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[47]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[48]
+Underfull \hbox (badness 10000) in paragraph at lines 3762--3764
+[]\T1/qtm/m/n/10.95 Ana-log-iczne parame-try warunk-uj¡ równie» wywoªanie AN-A-
+LYZE, na przykªad au-to-vac-
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[49]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[50]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[51]
+Underfull \hbox (badness 10000) in paragraph at lines 4033--4035
+[]\T1/qtm/m/n/10.95 Lep-sze rozªo»e-nie ob-ci¡»e-nia (mo»li-wo±¢ prze-chowywa-n
+ia par-ty-cji na ró»nych
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[52]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[53]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[54]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[55]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[56]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[57]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[58]
+Chapter 3.
+
+
+[59
+
+]
+Overfull \vbox (2.96326pt too high) detected at line 4613
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[60]
+Underfull \hbox (badness 10000) in paragraph at lines 4801--4801
+[]\T1/qhv/m/n/10.95 pa-
+ []
+
+
+Overfull \hbox (7.0858pt too wide) in paragraph at lines 4801--4801
+[]\T1/qhv/m/n/10.95 first_name| 
+ []
+
+
+Overfull \hbox (5.01396pt too wide) in paragraph at lines 4801--4801
+[]\T1/qhv/m/n/10.95 last_name| 
+ []
+
+
+Overfull \hbox (4.79414pt too wide) in paragraph at lines 4801--4801
+[]\T1/qhv/m/n/10.95 birth_date| 
+ []
+
+
+Overfull \hbox (7.3135pt too wide) in paragraph at lines 4801--4801
+[]\T1/qtm/m/n/10.95 Wi±niewska| 
+ []
+
+
+Overfull \hbox (8.34875pt too wide) in paragraph at lines 4801--4801
+[]\T1/qtm/m/n/10.95 90010112345| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4801--4801
+[]\T1/qtm/m/n/10.95 1990-01-
+ []
+
+
+Overfull \hbox (7.89714pt too wide) in paragraph at lines 4801--4801
+[][][]\T1/qtm/m/n/10.95 maria@example.com[][]| 
+ []
+
+
+Overfull \hbox (9.20488pt too wide) in paragraph at lines 4801--4801
+[]\T1/qtm/m/n/10.95 +48123123123| 
+ []
+
+
+Overfull \hbox (1.94803pt too wide) in paragraph at lines 4801--4801
+[]\T1/qtm/m/n/10.95 D¡browski| 
+ []
+
+
+Overfull \hbox (8.34875pt too wide) in paragraph at lines 4801--4801
+[]\T1/qtm/m/n/10.95 85050554321| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4801--4801
+[]\T1/qtm/m/n/10.95 1985-05-
+ []
+
+
+Overfull \hbox (13.76633pt too wide) in paragraph at lines 4801--4801
+[][][]\T1/qtm/m/n/10.95 tomasz@example.com[][]| 
+ []
+
+
+Overfull \hbox (9.20488pt too wide) in paragraph at lines 4801--4801
+[]\T1/qtm/m/n/10.95 +48987654321| 
+ []
+
+
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[61]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[62]
+Chapter 4.
+
+
+[63
+
+]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[64]
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[65]
 Chapter 5.
 No file Sprawozdanie.ind.
 
 
-[32
+[66
 
 ] (Sprawozdanie.aux)
  ***********
@@ -1287,34 +1652,36 @@ L3 programming layer <2025-06-09>
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package rerunfilecheck Info: File `Sprawozdanie.out' has not changed.
-(rerunfilecheck)             Checksum: B58352FB13F01FBB6CB5E47BC4DE1121;21841.
+(rerunfilecheck)             Checksum: 713F58F960DEE9C3465E5DCAC5C98B8C;51146.
  ) 
 Here is how much of TeX's memory you used:
- 20577 strings out of 468221
- 377433 string characters out of 5431924
- 855296 words of memory out of 5000000
- 48542 multiletter control sequences out of 15000+600000
- 685258 words of font info for 98 fonts, out of 8000000 for 9000
+ 21127 strings out of 468221
+ 395939 string characters out of 5431924
+ 866404 words of memory out of 5000000
+ 48857 multiletter control sequences out of 15000+600000
+ 686505 words of font info for 102 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 72i,12n,82p,1203b,667s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmmi6.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmsy10.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmsy6.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/tex-gyre/qhvb.pfb><C:/Users/Mateusz/AppData/Local/Programs
-/MiKTeX/fonts/type1/public/tex-gyre/qhvbi.pfb><C:/Users/Mateusz/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/tex-gyre/qhvr.pfb><C:/Users/Mateusz/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmb.pfb><C:/Users/Mateusz/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/Mateu
-sz/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pfb><C:/User
-s/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xbtt.pfb><
-C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xtt
-.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts
-/t1xtt.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/t
-xfonts/tcxtt.pfb>
-Output written on Sprawozdanie.pdf (32 pages, 372829 bytes).
+ 72i,12n,82p,1203b,738s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/fontawesom
+e5/FontAwesome5Free-Regular.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/fontawesome5/FontAwesome5Free-Solid.pfb><C:/Users/Mateusz/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users
+/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmsy6.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+tex-gyre/qhvb.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/tex-gyre/qhvbi.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/tex-gyre/qhvr.pfb><C:/Users/Mateusz/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/tex-gyre/qtmb.pfb><C:/Users/Mateusz/AppData/Local/Programs/M
+iKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/Mateusz/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/tex-gyre/qtmri.pfb><C:/Users/Mateusz/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/txfonts/t1xbtt.pfb><C:/Users/Mateusz/AppD
+ata/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xtt.pfb><C:/Users/Mateus
+z/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xtt.pfb><C:/Users/
+Mateusz/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/tcxtt.pfb>
+Output written on Sprawozdanie.pdf (66 pages, 612345 bytes).
 PDF statistics:
- 751 PDF objects out of 1000 (max. 8388607)
- 150 named destinations out of 1000 (max. 500000)
- 893 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1640 PDF objects out of 1728 (max. 8388607)
+ 373 named destinations out of 1000 (max. 500000)
+ 1949 words of extra memory for PDF output out of 10000 (max. 10000000)
 
